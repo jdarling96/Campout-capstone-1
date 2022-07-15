@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% block content %}
+
+<video autoplay muted loop id="myVideo">
+  <source src="/static/mp4/Pexels Videos 2711131.mp4" type=video/mp4>
+</video>
+
+<! -- video src at https://www.pexels.com/video/drone-footage-of-a-river-in-between-forests-land-2711130/ By: Kelly   -->
+
+<div class="overlay-video">
+  <div class="d-flex flex-column justify-content-around">
+    <h1 class="display-1 text-dark mb-5">Campout</h1>
+
+    <p class="lead text-center text-warning mt-4">
+      <b>Find State, Federal or Private campgrounds near you!</b>
+    </p>
+    <div> 
+    
+    <button class="btn btn-outline-warning">Search</button>
+</div>
+    
+  </div>
+</div>
+
+{% endblock %}
