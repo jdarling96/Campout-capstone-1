@@ -1,3 +1,4 @@
+from crypt import methods
 import os
 import requests
 import xmltodict
@@ -5,6 +6,7 @@ import pprint
 import xml.etree.cElementTree as et
 from flask import Flask, render_template, request, flash, redirect, session, g
 from models import *
+from forms import *
 
 from flask_debugtoolbar import DebugToolbarExtension
 from bs4 import BeautifulSoup
@@ -37,15 +39,18 @@ def add_user_to_g():
 
     if CURR_USER_KEY in session:
         g.user = User.query.get(session[CURR_USER_KEY])
+        g.token = token
 
     else:
         g.user = None
+        g.token = None
 
 
 def do_login(user):
     """Log in user."""
     
     session[CURR_USER_KEY] = user.id
+   
 
 
 def do_logout():
@@ -60,3 +65,25 @@ def do_logout():
 def check_info():
     """Homepage for Campout"""
     return render_template('home.html')
+
+
+@app.route('/about')
+def display_about_page():
+    """About page for Campout"""
+    return render_template('about.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register_user():
+    """Create new user and add to DB. Redirect to home page.
+    If form not valid, present form.
+    If the there already is a user with that username: flash message
+    and re-present form.
+    """
+    form = UserAddForm()
+
+    if form.validate_on_submit():
+        try:
+            user = User.signup(
+                username=form.username.data
+            ) 

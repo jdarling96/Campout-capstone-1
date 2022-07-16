@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block content %}
+
+
+<div class="container-fluid m-5">
+    <div class="d-flex flex-row justify-content-start m-5 pb-5" style="margin-bottom:20vh;">
+        <div>
+            <h2 class="display-3"> <p style=" border-bottom: 2px solid green;">Look no further weary</p><p style=" border-bottom: 2px solid green; width: min-content;">traveler!</p></h2>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between m-5">
+        <div class="container-sm" style="height:20vh;">
+            <h2>Active Access’s Campground API</h2>
+            <p>The Active Acccess Campground APIs, backed by Reserve America's database, provides access <br> to campground data for 97% of the US and Canada's national and state/provincial parks.</p>
+            <button class="btn btn-outline-info btn-sm px-5">Learn more</button>
+        </div>
+        <div class="container-sm">
+            <h2>Technology</h2>
+            <p>Campout if a fullstack web application that utilizes Flask for the back-end and HTML,CSS, and Javascript in the front-end.<br> Important libraries used are Bootstrap and jQuery. </p>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between m-5">
+        <div class="container-sm" style="height:20vh;">
+            <h2>How Does it Work?</h2>
+            <p>Campout uses the above API to find campground data based on the users location or location entrered.<br> Users can favorite/save sites which is stored in a database along with there user profile.</p>
+        </div>
+        <div class="container-sm">
+            <h2>More?</h2>
+            <p>Click the link below to see Campout’s Github repo.</p>
+            <button class="btn btn-outline-info btn-sm px-5">Learn more</button>
+        </div>
+    </div>
+    
+  </div>
+
+
+
+
+{% endblock %}

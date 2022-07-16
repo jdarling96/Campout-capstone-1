@@ -1,6 +1,7 @@
 """SQLAlchemy models for Campout"""
 
 
+from typing_extensions import Self
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
@@ -27,6 +28,12 @@ class States(db.Model):
         db.Text,
         unique=True
     )
+
+   
+    def get_states():
+        states = db.session.query(States).get(States.id, States.short_name)
+        return  list(states)
+
 
 
 
