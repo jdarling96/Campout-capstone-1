@@ -1,5 +1,6 @@
 body {
     min-height: 100vh;
+    background-color: gray;
   }
 
   #myVideo {
@@ -20,4 +21,13 @@ body {
 
   }
 
- 
+  #register-div{
+    width: 25vw;
+    height: 60vh;
+  }
+
+ input{
+  width: 15vw;
+  border: 1px solid lightslategrey;
+  
+ }

@@ -29,12 +29,6 @@ class States(db.Model):
         unique=True
     )
 
-   
-    def get_states():
-        states = db.session.query(States).get(States.id, States.short_name)
-        return  list(states)
-
-
 
 
 class User(db.Model):

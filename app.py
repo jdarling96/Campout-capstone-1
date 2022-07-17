@@ -5,8 +5,8 @@ import xmltodict
 import pprint
 import xml.etree.cElementTree as et
 from flask import Flask, render_template, request, flash, redirect, session, g
-from models import *
-from forms import *
+from models import db, connect_db, User, CampgroundData, Campground, Favorites, SavedSite, States
+from forms import UserAddForm
 
 from flask_debugtoolbar import DebugToolbarExtension
 from bs4 import BeautifulSoup
@@ -82,8 +82,10 @@ def register_user():
     """
     form = UserAddForm()
 
-    if form.validate_on_submit():
+    return render_template('register.html', form=form)
+
+    """  if form.validate_on_submit():
         try:
             user = User.signup(
                 username=form.username.data
-            ) 
+            )  """
