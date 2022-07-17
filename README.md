@@ -9,7 +9,7 @@
 
 
 
-The challenge for this site is working with HTTP responses in XML versus previous projects being in JSON. To send a request for a specific area the request parameters take in long and lat coordinates. I will implement HTML's current location and wiil possible add some calls to googls maps API to get addresses of campgrounds.
+The challenge for this site is working with HTTP responses in XML versus previous projects being in JSON. To send a request for a specific area the request parameters take in long and lat coordinates. I will implement HTML's geo location and will possibly add some calls to googls maps API to get the street addresses of campgrounds.
 
 
 ## <b>SITE FLOW</b>
