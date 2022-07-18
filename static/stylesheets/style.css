@@ -24,10 +24,24 @@ body {
   #register-div{
     width: 25vw;
     height: 60vh;
+    background-color: rgba(255, 255, 255, 0.5);
+    
   }
 
  input{
   width: 15vw;
+  
   border: 1px solid lightslategrey;
+  background-color: rgba(255, 255, 255, 0.5);
+  
   
  }
+
+#register-img{
+  height:95vh; 
+  width:100vw; 
+  background:linear-gradient(to right, transparent, rgb(248, 249, 215)), url(/static/images/reddit-design.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  
+}

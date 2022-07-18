@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
-
-<div class="d-flex justify-content-center" style="margin-top: 20vh;">
-   <div id="register-div" class="d-flex flex-column justify-content-center align-items-center p-1" style="border: 2px solid lightslategray; border-radius: 10px;">
+ <div id="register-img" class="d-flex justify-content-center">
+<div class="d-flex justify-content-center" style="margin-top: 15vh;">
+   <div id="register-div" class="d-flex flex-column justify-content-center align-items-center p-1" style="border-radius: 10px;">
     <h2 class='justify-content-center mb-5'>Register</h2>
     <form action=""> 
     {{ form.hidden_tag() }}
@@ -15,13 +15,14 @@
 
    <div class="mt-4">
     <p>Already have an account?</p>
-    <button onclick="window.location.href='/login'" type="button" class="btn btn-info btn-md" style="width: 8vw;">Login</button>
+    <button onclick="window.location.href='/login'" type="button" class="btn btn-outline-secondary btn-md" style="width: 8vw;">Login</button>
 
    </div>
 </div> 
 </form>
 
 
+</div>
 </div>
 
 {% endblock %}
