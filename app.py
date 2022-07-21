@@ -89,3 +89,11 @@ def register_user():
             user = User.signup(
                 username=form.username.data
             )  """
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """authenticat user and login.
+    If form not valid, present form.
+    if authentication is TRUE do_login()
+    Redirect to Homepage.
+    """            
