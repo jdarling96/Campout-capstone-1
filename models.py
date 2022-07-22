@@ -6,6 +6,7 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
 
+
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
@@ -14,13 +15,9 @@ class States(db.Model):
 
     __tablename__ = 'states'
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
-
     short_name = db.Column(
         db.Text,
+        primary_key=True,
         unique=True
     )
     
@@ -59,8 +56,8 @@ class User(db.Model):
     )
 
     state_id = db.Column(
-        db.Integer,
-        db.ForeignKey('states.id', ondelete='CASCADE')
+        db.Text,
+        db.ForeignKey('states.short_name', ondelete='CASCADE')
     )
 
     city = db.Column(
@@ -69,14 +66,11 @@ class User(db.Model):
     )
 
     site_type = db.Column(
-        db.Text,
+        db.Integer,
         nullable=True 
     )
 
-    camgrounds = db.relationship(
-        'Campground',
-        secondary='favorites',
-        backref='users')
+    
     
     favorites = db.relationship(
         'Favorites',
@@ -121,7 +115,7 @@ class User(db.Model):
         return user object
         else return false """
 
-        user = cls.query.filter_by(username=username)
+        user = cls.query.filter_by(username=username).first()
 
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)
@@ -188,12 +182,12 @@ class CampgroundData(db.Model):
 
     landmark_lat = db.Column(
         db.String(50),
-        nullable=False
+        nullable=True
     )
 
     landmark_long = db.Column(
         db.String(50),
-        nullable=False
+        nullable=True
     )
 
     

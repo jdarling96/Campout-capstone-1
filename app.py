@@ -1,4 +1,5 @@
 from crypt import methods
+import email
 import os
 import requests
 import xmltodict
@@ -6,7 +7,8 @@ import pprint
 import xml.etree.cElementTree as et
 from flask import Flask, render_template, request, flash, redirect, session, g
 from models import db, connect_db, User, CampgroundData, Campground, Favorites, SavedSite, States
-from forms import UserAddForm
+from forms import UserAddForm, UserLoginForm, SearchCampground
+from sqlalchemy.exc import IntegrityError
 
 from flask_debugtoolbar import DebugToolbarExtension
 from bs4 import BeautifulSoup
@@ -81,14 +83,40 @@ def register_user():
     and re-present form.
     """
     form = UserAddForm()
+    form.state_id.choices = [(state.short_name, state.long_name)for state in States.query.all()]
+    
+    
 
-    return render_template('register.html', form=form)
-
-    """  if form.validate_on_submit():
+    if form.validate_on_submit():
         try:
             user = User.signup(
-                username=form.username.data
-            )  """
+                username=form.username.data,
+                password=form.password.data,
+                email=form.email.data,
+                state_id=form.state_id.data,
+                city=form.city.data,
+                site_type=form.site_type.data,
+                )
+            
+            db.session.commit()
+           
+        
+        except IntegrityError:
+            flash('Username already in use', 'danger')
+            return render_template('users/register.html', form=form)
+
+        
+        do_login(user)
+        
+        flash(f'Welcome {user.username}', 'success')
+        return redirect('/')    
+
+       
+
+    else:
+        return render_template('users/register.html', form=form)    
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -96,4 +124,33 @@ def login():
     If form not valid, present form.
     if authentication is TRUE do_login()
     Redirect to Homepage.
-    """            
+    """    
+
+    form = UserLoginForm()
+
+    if form.validate_on_submit():
+        user = User.auth(
+            username=form.username.data,
+            password=form.password.data
+            )
+        
+        if user:
+            do_login(user)
+            flash(f'Welcome back, {user.username}!','success')
+            return redirect('/')
+            
+        
+        flash('Invalid credentials.', 'danger')
+
+    return render_template('users/login.html', form=form)    
+
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search_campgrounds_form():
+    
+    form = SearchCampground()
+    form.state_id.choices = [(state.short_name, state.long_name)for state in States.query.all()]
+    return render_template('search.html', form=form)
+
+

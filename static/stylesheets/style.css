@@ -11,11 +11,21 @@ body {
 
   .overlay-video{
     position: absolute;
-    
     top: 25%;
     left: 25%;
     right: 25%;
     bottom: 25%;
+    text-align: center;
+    border-radius: 10px;
+
+  }
+
+  .flash-msg{
+    position: absolute;
+    top: 5%;
+    left: 25%;
+    right: 25%;
+    
     text-align: center;
     border-radius: 10px;
 
@@ -40,7 +50,7 @@ body {
 #register-img{
   height:95vh; 
   width:100vw; 
-  background:linear-gradient(to right, transparent, rgb(248, 249, 215)), url(/static/images/reddit-design.jpg);
+  background:linear-gradient(to right, transparent, rgb(57, 91, 100)), url(/static/images/reddit-design.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   
