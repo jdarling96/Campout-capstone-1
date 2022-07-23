@@ -4,42 +4,28 @@
        <div id="search-div" class="d-flex flex-column justify-content-center align-items-center p-1" style="border-radius: 10px;">
         <h2 class='justify-content-center mb-5'>Search</h2>
         
-        <form method="post" action="/register">
-            
-           
-            
+        <form method="post" action="/search">
         {{ form.hidden_tag() }}
         <div class="container">
             <div class="row">
         
         {% for field in form if field.widget.input_type != 'hidden' %}
-        
-
-        
-       <div class="col">
+        <div class="col-md-auto m-3">
         <p class="h6 mb-2">{{field.label}}</p>
         {% for error in field.errors %}
         <p class="text-danger">{{ error }}</p>
         {% endfor %}
         {{field(placeholder='Optional', style='border-radius: 5px;')}}
          </div>
-        {% endfor %}
-       
-        
-       <div class="">
-       
-        <button onclick="window.location.href='/login'" type="button" class="btn btn-outline-secondary btn-md" style="width: 8vw;">Search</button>
-    
+         {% endfor %}
+       <div class="d-flex justify-content-center">
+       <button type="submit" class="btn btn-outline-secondary btn-lg btn-block mt-5" ><i class="gg-search"></i></button>
        </div>
     </div>
 </div>
 </div> 
  
-    </form>
-
-
-    
-    
+         </form>
     </div>
     </div>
 {% endblock %}

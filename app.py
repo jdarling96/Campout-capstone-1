@@ -29,11 +29,11 @@ toolbar = DebugToolbarExtension(app)
 
 
 connect_db(app)
-
-token = 'crkt92prkygkp3h6j7kb62c2'
+API_URL = 'http://api.amp.active.com/camping/campgrounds/?'
+TOKEN = 'crkt92prkygkp3h6j7kb62c2'
 FACILTYPHOTO_BASE_URL = 'http://www.reserveamerica.com'
 CURR_USER_KEY = "curr_user"
-USER_TOKEN = 'curr_user_token'
+
 
 @app.before_request
 def add_user_to_g():
@@ -41,11 +41,11 @@ def add_user_to_g():
 
     if CURR_USER_KEY in session:
         g.user = User.query.get(session[CURR_USER_KEY])
-        g.token = token
+        
 
     else:
         g.user = None
-        g.token = None
+        
 
 
 def do_login(user):
@@ -148,11 +148,27 @@ def login():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_campgrounds_form():
+
+    """   if not g.user:
+        flash('Please register/login first', 'danger')
+        return redirect('login') """
     
     form = SearchCampground()
     form.state_id.choices = [(state.short_name, state.long_name)for state in States.query.all()]
-    form.site_type.choices.insert(0,(0,''))
-    form.amenity.choices.insert(0,(0,''))
+    
+
+    if form.validate_on_submit():
+        
+        form_data = [form.state_id.data,form.pname.data,form.site_type.data,form.amenity.data,form.eqplen.data,form.max_people.data,form.hookup.data,
+        form.sewer.data,form.water.data,form.pull.data,form.pets.data,form.waterfront.data]
+        wow = [data for data in form_data if data not in ['',0,None]]
+        print(wow)
+        return redirect('/')
+        
+        wow = [[data]for data in form_data if 0 not in data or '' not in data]
+        """   print(form_data)
+        return redirect('/') """
+
     
     return render_template('search.html', form=form)
 
