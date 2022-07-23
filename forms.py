@@ -42,11 +42,11 @@ class SearchCampground(FlaskForm):
 
     state_id = SelectField('State')
 
-    pname = StringField('Park Name')
+    pname = StringField('Park Name', validators=[Optional()])
 
     site_type = SelectField('Site Type', coerce=int, choices=[(2001,'RV'),(10001,'Cabins/Lodgings'),
      (2003,'Tent'),(2002, 'Trailer'),(9002,'Big Groups'),(9001,'Day Use'),
-     (3001,'Horse Site'),(2004,'Boat Site')])
+     (3001,'Horse Site'),(2004,'Boat Site')], validators=[Optional()])
 
 
     amenity = SelectField('Campground Feature', coerce=int, choices=[(4001,'Biking'),(4002,'Boating'),
@@ -68,7 +68,7 @@ class SearchCampground(FlaskForm):
     (3004,'30 Amps or More'),(3005, '50 Amps or More')])
    
     
-    sewer = RadioField('Electric Hookup', choices=[(3007,'Y')])
+    sewer = RadioField('Sewer Hookup', choices=[(3007,'Y')])
 
     
     water = RadioField('Water Hookup', choices=[(3006,'Y')])

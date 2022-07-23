@@ -151,6 +151,9 @@ def search_campgrounds_form():
     
     form = SearchCampground()
     form.state_id.choices = [(state.short_name, state.long_name)for state in States.query.all()]
+    form.site_type.choices.insert(0,(0,''))
+    form.amenity.choices.insert(0,(0,''))
+    
     return render_template('search.html', form=form)
 
 

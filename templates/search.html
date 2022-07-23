@@ -1,28 +1,43 @@
 {% extends 'base.html' %} {% block content %}
 <div id="register-img" class="d-flex justify-content-center">
     <div class="d-flex justify-content-center" style="margin-top: 15vh;">
-       <div id="register-div" class="d-flex flex-column justify-content-center align-items-center p-1" style="border-radius: 10px;">
-        <h2 class='justify-content-center mb-5'>Register</h2>
-        <form method="post" action="/register"> 
+       <div id="search-div" class="d-flex flex-column justify-content-center align-items-center p-1" style="border-radius: 10px;">
+        <h2 class='justify-content-center mb-5'>Search</h2>
+        
+        <form method="post" action="/register">
+            
+           
+            
         {{ form.hidden_tag() }}
+        <div class="container">
+            <div class="row">
+        
         {% for field in form if field.widget.input_type != 'hidden' %}
-       <div class="p-1">
+        
+
+        
+       <div class="col">
         <p class="h6 mb-2">{{field.label}}</p>
         {% for error in field.errors %}
         <p class="text-danger">{{ error }}</p>
         {% endfor %}
-        {{field(placeholder=field.label.text, style='border-radius: 5px;')}}
+        {{field(placeholder='Optional', style='border-radius: 5px;')}}
          </div>
-       {% endfor %}
-       <button class="btn btn-warning mt-3" type="submit">Register</button>
-    
-       <div class="mt-4">
-        <p>Already have an account?</p>
-        <button onclick="window.location.href='/login'" type="button" class="btn btn-outline-secondary btn-md" style="width: 8vw;">Login</button>
+        {% endfor %}
+       
+        
+       <div class="">
+       
+        <button onclick="window.location.href='/login'" type="button" class="btn btn-outline-secondary btn-md" style="width: 8vw;">Search</button>
     
        </div>
-    </div> 
+    </div>
+</div>
+</div> 
+ 
     </form>
+
+
     
     
     </div>
