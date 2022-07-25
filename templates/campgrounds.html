@@ -1,5 +1,62 @@
 {% extends 'base.html' %} {% block content %}
+
+
 <div id="search-data-container" class="d-flex flex-column justify-content-center align-self-center">
+    
+    <div class="container mt-2" style="background-color: rgba(255, 255, 255, 0.5); border: 1px solid lightslategrey; border-radius: 5px;">
+        <div class="d-flex sm-row justify-content-sm-around align-self-center" style="background-color: rgb(125, 157, 156); border-radius: 5px;">
+            {% for key in result_set if key in ['@count', '@pstate', '@resultType'] %}
+            <div class="p1">
+            <p class="h6 p-2">{{result_set[key]}}</p>
+            </div>
+            {% endfor %}
+        </div>
+       
+        <div class="row">
+            {% for key in result[:5] %}
+            <div class="col-6 mt-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            {% if key['@faciltyPhoto'] != '/images/nophoto.jpg' %}
+                            <img class="img-thumbnail" src="http://www.reserveamerica.com{{key['@faciltyPhoto']}}" alt="Picture of campsite." srcset="">
+                            {% else %}
+                            <img class="img-thumbnail" src="/static/images/generic-campsite.jpg" alt="Generic picture of campsite provided by Campout." srcset="">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="h6">Park: {{key['@facilityName']}}</p>
+                        </div>
+                        <div class="col">
+                            <p class="h6">State: {{key['@state']}}</p>
+                            <p class="h6">Type: {{key['@contractType']}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="h6">Sites With Amps: {{key['@sitesWithAmps']}}</p>
+                            <p class="h6">Pets Allowed: {{key['@sitesWithPetsAllowed']}}</p>
+                            <p class="h6">Water Hookup: {{key['@sitesWithWaterHookup']}}</p>
+                            <p class="h6">Sewer Hookup: {{key['@sitesWithSewerHookup']}}</p>
+                            <p class="h6">Waterfront: {{key['@sitesWithWaterfront']}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mt-1 mb-2">
+                            <button class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-heart"></i></button>
+                            <button class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+
 
 </div>
 {% endblock %}
+

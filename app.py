@@ -175,11 +175,13 @@ def search_campgrounds_form():
         )
         if response:
             dict_data = xmltodict.parse(response.content)
-            print(dict_data)
+            result_set = dict_data['resultset']
+            result = dict_data['resultset']['result']
+            print(result_set)
         else:
             print('failed')  
         
-        return redirect('campgrounds.html')      
+        return render_template('campgrounds.html', result_set=result_set, result=result)      
 
     
     return render_template('search.html', form=form)
