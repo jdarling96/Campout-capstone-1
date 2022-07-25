@@ -30,7 +30,7 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 API_URL = 'http://api.amp.active.com/camping/campgrounds/?'
-TOKEN = 'crkt92prkygkp3h6j7kb62c2'
+TOKEN = 'api_key=crkt92prkygkp3h6j7kb62c2'
 FACILTYPHOTO_BASE_URL = 'http://www.reserveamerica.com'
 CURR_USER_KEY = "curr_user"
 
@@ -154,20 +154,32 @@ def search_campgrounds_form():
         return redirect('login') """
     
     form = SearchCampground()
-    form.state_id.choices = [(state.short_name, state.long_name)for state in States.query.all()]
+    form.pstate.choices = [(state.short_name, state.long_name)for state in States.query.all()]
     
 
     if form.validate_on_submit():
         
-        form_data = [form.state_id.data,form.pname.data,form.site_type.data,form.amenity.data,form.eqplen.data,form.max_people.data,form.hookup.data,
-        form.sewer.data,form.water.data,form.pull.data,form.pets.data,form.waterfront.data]
-        wow = [data for data in form_data if data not in ['',0,None]]
-        print(wow)
-        return redirect('/')
+        form_data = [(form.pstate.name ,form.pstate.data), (form.pname.name, form.pname.data),(form.site_type.name, form.site_type.data),
+        (form.amenity.name, form.amenity.data),(form.eqplen.name, form.eqplen.data),
+        (form.Maxpeople.name, form.Maxpeople.data),(form.hookup.name, form.hookup.data),
+        (form.sewer.name, form.sewer.data),(form.water.name, form.water.data),(form.pull.name, form.pull.data),
+        (form.pets.name, form.pets.data),(form.waterfront.name, form.waterfront.data)]
+        data = [(k,v) for (k,v) in form_data if v not in ['',0,None]]
+        """ print(data)  """
         
-        wow = [[data]for data in form_data if 0 not in data or '' not in data]
-        """   print(form_data)
-        return redirect('/') """
+        
+
+        response = requests.get(
+            API_URL+TOKEN,
+            params=[(k,v) for (k,v) in data]
+        )
+        if response:
+            dict_data = xmltodict.parse(response.content)
+            print(dict_data)
+        else:
+            print('failed')  
+        
+        return redirect('campgrounds.html')      
 
     
     return render_template('search.html', form=form)

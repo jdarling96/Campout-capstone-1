@@ -34,7 +34,7 @@ class UserLoginForm(FlaskForm):
 class SearchCampground(FlaskForm):
     """Form for searching for campground based on API filters"""
 
-    state_id = SelectField('State')
+    pstate = SelectField('State')
 
     pname = StringField('Park Name', validators=[Optional()])
 
@@ -53,7 +53,7 @@ class SearchCampground(FlaskForm):
     validators=[NumberRange(min=5, max=50, message='Equipment Length must be a minimum of %(min)d and a maximum of %(max)d'),Optional()])
      
 
-    max_people = StringField('Number of campers',
+    Maxpeople = StringField('Number of campers',
     validators=[Length(min=1, max=8, message='Number of campers must be a minimum of %(min)d and a maximum of %(max)d'),Optional()])
         
     
