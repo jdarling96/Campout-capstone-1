@@ -9,13 +9,14 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from models import db, connect_db, User, CampgroundData, Campground, Favorites, SavedSite, States
 from forms import UserAddForm, UserLoginForm, SearchCampground
 from sqlalchemy.exc import IntegrityError
+import numpy as np
 
 from flask_debugtoolbar import DebugToolbarExtension
 from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
-app.debug = True
+app.debug = False
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///campout'))
 
@@ -148,10 +149,9 @@ def login():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_campgrounds_form():
-
-    """   if not g.user:
+    if not g.user:
         flash('Please register/login first', 'danger')
-        return redirect('login') """
+        return redirect('login')  
     
     form = SearchCampground()
     form.pstate.choices = [(state.short_name, state.long_name)for state in States.query.all()]
@@ -176,14 +176,60 @@ def search_campgrounds_form():
         if response:
             dict_data = xmltodict.parse(response.content)
             result_set = dict_data['resultset']
-            result = dict_data['resultset']['result']
-            print(result_set)
+            try:
+                result = dict_data['resultset']['result'] 
+                if len(result) < 24:
+                    camps = np.array_split(result, 1)
+                    print(len(camps))
+                if len(result) >= 24:
+                    camps = np.array_split(result, 2)
+                    print(len(camps))
+                if len(result) >= 50:
+                    camps = np.array_split(result, 4)
+                    print(len(camps))
+                if len(result) >= 100:
+                    camps = np.array_split(result, 6)
+                    print(len(camps))
+            except KeyError:
+                flash('Invalid search. Make sure fields are valid', 'danger')
+                return redirect('/search')
+
+
+
         else:
-            print('failed')  
+            print('failed')
+            
         
-        return render_template('campgrounds.html', result_set=result_set, result=result)      
+        return render_template('campgrounds.html', result_set=result_set, camps=camps)      
 
     
     return render_template('search.html', form=form)
+
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """404 NOT FOUND page."""
+
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def page_not_found(e):
+    """404 NOT FOUND page."""
+
+    return render_template('500.html'), 500
+
+
+
+@app.after_request
+def add_header(req):
+    """Add non-caching headers on every request."""
+
+    req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    req.headers["Pragma"] = "no-cache"
+    req.headers["Expires"] = "0"
+    req.headers['Cache-Control'] = 'public, max-age=0'
+    return req
 
 
