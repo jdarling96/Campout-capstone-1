@@ -46,8 +46,15 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <button class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-heart"></i></button>
-                            <button class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-bookmark"></i></button>
+                            <form action="">
+                                <input type="hidden" value="{{key['@facilityName']}}">
+                                <input type="hidden" value="{{key['@facilityName']}}">
+                                <input type="hidden" value="{{key['@facilityName']}}">
+                                <input type="hidden" value="{{key['@facilityName']}}">
+                                <input type="hidden" value="{{key['@facilityName']}}">
+                                <input type="hidden" value="{{key['@facilityName']}}">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-bookmark"></i></button>
+                        </form>
                         </div>
                     </div>
                     
@@ -193,7 +200,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <p class="h6">Park: {{key['@facilityName']}}</p>
+                           <p class="h6">Park: {{key['@facilityName']}}</p>
                         </div>
                         <div class="col">
                             <p class="h6">State: {{key['@state']}}</p>

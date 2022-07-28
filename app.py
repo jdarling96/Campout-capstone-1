@@ -121,7 +121,7 @@ def register_user():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """authenticat user and login.
+    """authenticate user and login.
     If form not valid, present form.
     if authentication is TRUE do_login()
     Redirect to Homepage.
@@ -204,6 +204,12 @@ def search_campgrounds_form():
 
     
     return render_template('search.html', form=form)
+
+
+@app.route('/save')
+def user_favorites():
+    """Show user dashboard"""
+    return render_template('dashboard.html')
 
 
 
