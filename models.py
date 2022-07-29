@@ -135,58 +135,45 @@ class CampgroundData(db.Model):
         primary_key=True
     )
 
-    max_people = db.Column(
-        db.String(2),
-        nullable=True
-    )
-
-    amenity = db.Column(
-        db.Integer,
-        nullable=True
-    )
-
+   
     pets = db.Column(
-        db.String(4),
+        db.Text,
         nullable=True
     )
 
     water = db.Column(
-        db.String(4),
+        db.Text,
         nullable=True
     )                  
     
     sewer = db.Column(
-        db.String(4),
+        db.Text,
         nullable=True
     )
 
-    hookup = db.Column(
-        db.String(4),
+    amps = db.Column(
+        db.Text,
+        nullable=True
+    )
+    
+    eq_length = db.Column(
+        db.Text,
         nullable=True
     )
 
-    pull = db.Column(
-        db.String(4),
-        nullable=True
-    )
-
-    eqplen = db.Column(
-        db.Integer,
-        nullable=True
-    )
 
     waterfront = db.Column(
-       db.String(4),
+       db.Text,
        nullable=True
     )
 
     landmark_lat = db.Column(
-        db.String(50),
+        db.Text,
         nullable=True
     )
 
     landmark_long = db.Column(
-        db.String(50),
+        db.Text,
         nullable=True
     )
 
@@ -223,6 +210,11 @@ class Campground(db.Model):
     state = db.Column(
         db.Text,
         nullable=False
+    )
+
+    facility_type = db.Column(
+         db.Text,
+         nullable=True
     )
 
     amenities = db.relationship(

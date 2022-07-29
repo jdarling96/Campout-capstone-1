@@ -1,6 +1,7 @@
 from crypt import methods
 import email
 import os
+import flask_sqlalchemy
 import requests
 import xmltodict
 import pprint
@@ -200,16 +201,62 @@ def search_campgrounds_form():
             print('failed')
             
         
-        return render_template('campgrounds.html', result_set=result_set, camps=camps)      
+        return render_template('campgrounds.html', result_set=result_set, camps=camps, user=g.user)      
 
     
     return render_template('search.html', form=form)
 
 
-@app.route('/save')
-def user_favorites():
-    """Show user dashboard"""
-    return render_template('dashboard.html')
+@app.route('/save/<int:user_id>', methods=['GET', 'POST'])
+def save_camp_sites(user_id):
+    """Save campsites for users"""
+    if g.user.id != user_id:
+        flash('Please register/login first', 'danger')
+        return redirect('login')
+
+    if request.method == 'POST':
+        print(request.form["state"],request.form["facility_photo"],
+        request.form["facility_name"], request.form["facility_type"])
+        
+        """   request.form["facility_photo"]
+        request.form["facility_name"] 
+        request.form["state"] 
+        request.form["facility_type"] 
+        request.form["amps"]
+        request.form["pets"]
+        request.form["water"] 
+        request.form["sewer"] 
+        request.form["waterfront"] 
+        
+        request.form['latitude']
+        request.form['longitude']
+         """
+        
+        camp_data = CampgroundData(pets=request.form["pets"], water=request.form["water"], sewer=request.form["sewer"],
+        amps=request.form["amps"], waterfront=request.form["waterfront"], landmark_lat=request.form['landmark_lat'],
+        landmark_long=request.form['landmark_long'])
+        db.session.add(camp_data)
+        db.session.flush()
+        db.session.refresh(camp_data)
+        
+        
+        """ camp_data_id = CampgroundData.query.filter(CampgroundData.landmark_lat == request.form['@latitude']) """
+        
+        campground = Campground(camp_data_id=camp_data.id,  facility_name=request.form["facility_name"],  facility_photo=request.form["facility_photo"],
+        state=request.form["state"], facility_type=request.form["facility_type"])
+    
+        db.session.add(campground)
+        db.session.flush()
+        db.session.refresh(campground)
+
+        save_site =SavedSite(user_id=user_id,camp_id=campground.id)
+        db.session.add(save_site)
+        db.session.commit()
+        
+        flash('Site has been saved', 'success')
+        return redirect('/search')
+    else:
+        return render_template('dashboard.html')
 
 
 
