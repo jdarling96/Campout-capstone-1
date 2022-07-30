@@ -1,14 +1,19 @@
-body {
- min-height: 100vh;
-    margin: 0;
-    padding: 0;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
   }
 
 
   #myVideo {
-    min-width: 100vw;
-    height: 95vh;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top:0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  object-fit: fill;
   }
 
   .overlay-video{
@@ -96,11 +101,31 @@ body {
 
 }
 
-/* #search-data-container{
-  height: 95vh;
-  background-color: gray;
+ #search-data-container{
+  width: 100%;
+  
+  position: relative;
+  top:0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgb(87, 111, 114);
 
-} */
+}
+
+#save-data-container{
+  margin-top: 4%;
+  width: 100%;
+  height: 100%;
+  
+  position: relative;
+  top:0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  
+  
+}
 
 
 

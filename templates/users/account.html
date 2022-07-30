@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% block content %}
+<div id="save-data-container" class="d-flex flex-column">
+    <div class="container p-3" style="background-color: rgba(255, 255, 255, 0.5); border: 1px solid lightslategrey; border-radius: 5px;">
+        <div class="row mb-2">
+            <div class="col-md-8">
+                <h2>{{g.user.username}}'s Saved Sites</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <h3>A {{g.user.state_id}} Camper</h3>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <button type="button" class="btn btn-primary btn-sm">Edit</button>
+            </div>
+        </div>
+        <div class="row mb-4 mt-5">
+            <div class="col-md-8">
+                <p class="h4">Below is a list of all of your saved sites. Click the button for a list of recommend sites based on your list!</p>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <button id="saved-sites" type="button" class="btn btn-secondary btn-lg btn-block">Saved</button>
+            </div>
+            <div class="col">
+                <button id="recommended-sites" type="button" class="btn btn-secondary btn-lg btn-block">Recommend</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% for p in campgrounds %}
+<h2>{{p.facility_name}}</h2>
+{% endfor %}
+{% endblock %}

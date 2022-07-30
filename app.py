@@ -1,16 +1,23 @@
 from crypt import methods
 import email
+from json import dumps
+import json
 import os
+from re import U
+from webbrowser import get
 import flask_sqlalchemy
+from pandas import json_normalize
 import requests
+from sqlalchemy import JSON
 import xmltodict
 import pprint
 import xml.etree.cElementTree as et
-from flask import Flask, render_template, request, flash, redirect, session, g
+from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from models import db, connect_db, User, CampgroundData, Campground, Favorites, SavedSite, States
 from forms import UserAddForm, UserLoginForm, SearchCampground
 from sqlalchemy.exc import IntegrityError
 import numpy as np
+
 
 from flask_debugtoolbar import DebugToolbarExtension
 from bs4 import BeautifulSoup
@@ -207,56 +214,90 @@ def search_campgrounds_form():
     return render_template('search.html', form=form)
 
 
-@app.route('/save/<int:user_id>', methods=['GET', 'POST'])
-def save_camp_sites(user_id):
+@app.route('/search/save/users/<int:user_id>', methods=['POST'])
+def user_save_site(user_id):
     """Save campsites for users"""
-    if g.user.id != user_id:
+    if not g.user.id:
         flash('Please register/login first', 'danger')
         return redirect('login')
 
-    if request.method == 'POST':
-        print(request.form["state"],request.form["facility_photo"],
-        request.form["facility_name"], request.form["facility_type"])
-        
-        """   request.form["facility_photo"]
-        request.form["facility_name"] 
-        request.form["state"] 
-        request.form["facility_type"] 
-        request.form["amps"]
-        request.form["pets"]
-        request.form["water"] 
-        request.form["sewer"] 
-        request.form["waterfront"] 
-        
-        request.form['latitude']
-        request.form['longitude']
-         """
-        
-        camp_data = CampgroundData(pets=request.form["pets"], water=request.form["water"], sewer=request.form["sewer"],
-        amps=request.form["amps"], waterfront=request.form["waterfront"], landmark_lat=request.form['landmark_lat'],
-        landmark_long=request.form['landmark_long'])
-        db.session.add(camp_data)
-        db.session.flush()
-        db.session.refresh(camp_data)
-        
-        
-        """ camp_data_id = CampgroundData.query.filter(CampgroundData.landmark_lat == request.form['@latitude']) """
-        
-        campground = Campground(camp_data_id=camp_data.id,  facility_name=request.form["facility_name"],  facility_photo=request.form["facility_photo"],
-        state=request.form["state"], facility_type=request.form["facility_type"])
-    
-        db.session.add(campground)
-        db.session.flush()
-        db.session.refresh(campground)
+      
 
-        save_site =SavedSite(user_id=user_id,camp_id=campground.id)
-        db.session.add(save_site)
-        db.session.commit()
+    
+    print(request.form["state"],request.form["facility_photo"],
+    request.form["facility_name"], request.form["facility_type"])
+    
+    """   request.form["facility_photo"]
+    request.form["facility_name"] 
+    request.form["state"] 
+    request.form["facility_type"] 
+    request.form["amps"]
+    request.form["pets"]
+    request.form["water"] 
+    request.form["sewer"] 
+    request.form["waterfront"] 
+    
+    request.form['latitude']
+    request.form['longitude']
+     """
+    
+    camp_data = CampgroundData(pets=request.form["pets"], water=request.form["water"], sewer=request.form["sewer"],
+    amps=request.form["amps"], waterfront=request.form["waterfront"], landmark_lat=request.form['landmark_lat'],
+    landmark_long=request.form['landmark_long'])
+    db.session.add(camp_data)
+    db.session.flush()
+    db.session.refresh(camp_data)
+    
         
-        flash('Site has been saved', 'success')
-        return redirect('/search')
-    else:
-        return render_template('dashboard.html')
+    """ camp_data_id = CampgroundData.query.filter(CampgroundData.landmark_lat == request.form['@latitude']) """
+    
+    campground = Campground(camp_data_id=camp_data.id,  facility_name=request.form["facility_name"],  facility_photo=request.form["facility_photo"],
+    state=request.form["state"], facility_type=request.form["facility_type"])
+
+    db.session.add(campground)
+    db.session.flush()
+    db.session.refresh(campground)
+    save_site =SavedSite(user_id=user_id,camp_id=campground.id)
+    db.session.add(save_site)
+    db.session.commit()
+    
+    flash('Site has been saved', 'success')
+    return redirect('/search')
+    
+
+
+@app.route('/user/account/<int:user_id>')
+def user_account(user_id):
+    if not g.user:
+        flash('Please register/login first', 'danger')
+        return redirect('login')
+
+
+    user = User.query.get(user_id)    
+    campgrounds = Campground.query.filter(Campground.id.in_([n.camp_id for n in user.saved_site]))    
+    
+    return render_template('users/account.html', user=g.user, campgrounds=campgrounds)  
+
+
+@app.route('/api/users/account/saved')
+def users_saved_sites():
+    user = User.query.get_or_404(g.user.id)
+    
+    """ campground = Campground.query.get(user.saved_site) """
+    
+    
+    campgrounds = Campground.query.filter(Campground.id.in_([n.camp_id for n in user.saved_site]))
+    print(campgrounds)
+    
+       
+        
+    return jsonify([ [ { "facility_name" : c.facility_name, "facility_photo" : c.facility_photo , 
+        "state" : c.state, "facility_type" : c.facility_type} ] for c in campgrounds])
+        
+        
+    
+    
+   
 
 
 

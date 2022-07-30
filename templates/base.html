@@ -31,7 +31,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="manifest" href="/site.webmanifest" />
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
     <link href="https://css.gg/search.css" rel="stylesheet" />
   </head>
@@ -82,21 +81,13 @@
           Register
         </button>
         {% else %}
-        <br />
+         <br />
         <button
-          onclick="window.location.href='/favorites/{{g.user.id}}'"
+          onclick="window.location.href='/user/account/{{g.user.id}}'"
           type="button"
           class="btn btn-outline-warning btn-sm mb-2"
         >
-          Favorites
-        </button>
-        <br />
-        <button
-          onclick="window.location.href='/save/{{g.user.id}}'"
-          type="button"
-          class="btn btn-outline-warning btn-sm mb-2"
-        >
-          Saved Sites
+          Account
         </button>
         {% endif %}
         <br />
@@ -129,6 +120,7 @@
     {% block content %} {% endblock %}
 
     <script src="/static/app.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script
       src="https://kit.fontawesome.com/8cb147227a.js"
       crossorigin="anonymous"

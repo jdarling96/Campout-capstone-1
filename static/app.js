@@ -1,12 +1,4 @@
-window.onload = function () {
-    if (window.jQuery) {
-      // jQuery is loaded
-      console.log("jQuery has loaded!");
-    } else {
-      // jQuery is not loaded
-      console.log("jQuery has not loaded!");
-    }
-  }
+
 
 /* const el = $('#div1') */
 
@@ -25,6 +17,17 @@ for(let btn of btns){
     })
   
 }
+
+$('#saved-sites').click(function(){
+  getSaves()
+  
+})
+
+async function getSaves() {
+  let res = await axios.get('http://127.0.0.1:5000/api/users/account/saved')
+  console.log(res.data)
+}
+
 
 
 

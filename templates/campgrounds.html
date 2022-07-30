@@ -1,16 +1,21 @@
 {% extends 'base.html' %} {% block content %}
 
+<div class="d-flex sm-row justify-content-sm-around align-self-center" style="background-color: rgb(128, 154, 111);">
+    {% for key in result_set if key in ['@count', '@pstate', '@resultType', '@eqplen'] %}
+    <div class="p1">
+    <p class="h6 p-2">{{key[1:]}}: {{result_set[key]}}</p>
+    </div>
+    {% endfor %}
+</div>
+{% if camps|length > 1 %}
+<div id="search-data-container" class="d-flex flex-column">
+    {% else %}
+    <div id="search-data-container" class="d-flex flex-column" style="height:100%;">
+        {% endif %}
 
-<div id="search-data-container" class="d-flex flex-column justify-content-center align-self-center" style="background-color: rgb(228, 220, 207);">
     
     <div class="container mt-2" style="background-color: rgba(255, 255, 255, 0.5); border: 1px solid lightslategrey; border-radius: 5px;">
-        <div class="d-flex sm-row justify-content-sm-around align-self-center" style="background-color: rgb(125, 157, 156); border-radius: 5px;">
-            {% for key in result_set if key in ['@count', '@pstate', '@resultType', '@eqplen'] %}
-            <div class="p1">
-            <p class="h6 p-2">{{key[1:]}}: {{result_set[key]}}</p>
-            </div>
-            {% endfor %}
-        </div>
+        
        
         <div class="row">
             {% for key in camps[0] %}
@@ -20,9 +25,9 @@
                     <div class="row">
                         <div class="col">
                             {% if key['@faciltyPhoto'] != '/images/nophoto.jpg' %}
-                            <img class="img-thumbnail" src="http://www.reserveamerica.com{{key['@faciltyPhoto']}}" alt="Picture of campsite." srcset="">
+                            <img class="img-thumbnail mb-2" src="http://www.reserveamerica.com{{key['@faciltyPhoto']}}" alt="Picture of campsite." srcset="">
                             {% else %}
-                            <img class="img-thumbnail" src="/static/images/generic-campsite.jpg" alt="Generic picture of campsite provided by Campout." srcset="">
+                            <img class="img-thumbnail mb-2" src="/static/images/generic-campsite.jpg" alt="Generic picture of campsite provided by Campout." srcset="">
                             {% endif %}
                         </div>
                     </div>
@@ -46,7 +51,7 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/save/{{user.id}}" method='POST'>
+                            <form action="/search/save/users/{{user.id}}" method='POST'>
                                 <input name="facility_photo" type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
                                 <input name="facility_name" type="hidden" value="{{key['@facilityName']}}">
                                 <input name="state" type="hidden" value="{{key['@state']}}">
@@ -101,7 +106,7 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/save" method="post">
+                            <form action="/search/save/users/{{user.id}}" method="post">
                                 <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
                                 <input type="hidden" value="{{key['@facilityName']}}">
                                 <input type="hidden" value="{{key['@state']}}">
@@ -152,7 +157,7 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/save" method="post">
+                            <form action="/search/save/users/{{user.id}}" method="post">
                                 <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
                                 <input type="hidden" value="{{key['@facilityName']}}">
                                 <input type="hidden" value="{{key['@state']}}">
@@ -203,7 +208,7 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/save" method="post">
+                            <form action="/search/save/users/{{user.id}}" method="post">
                                 <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
                                 <input type="hidden" value="{{key['@facilityName']}}">
                                 <input type="hidden" value="{{key['@state']}}">
@@ -254,7 +259,7 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/save" method="post">
+                            <form action="/search/save/users/{{user.id}}" method="post">
                                 <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
                                 <input type="hidden" value="{{key['@facilityName']}}">
                                 <input type="hidden" value="{{key['@state']}}">
@@ -305,7 +310,7 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/save" method="post">
+                            <form action="/search/save/users/{{user.id}}" method="post">
                                 <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
                                 <input type="hidden" value="{{key['@facilityName']}}">
                                 <input type="hidden" value="{{key['@state']}}">
