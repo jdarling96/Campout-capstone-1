@@ -223,13 +223,7 @@ class Campground(db.Model):
     )
 
     
-    def serialize(self):
-        return {
-            'facility_name': self.facility_name, 
-            'facility_photo': self.facility_photo,
-            'state': self.state,
-            'facility_type': self.facility_type,
-        }
+  
 
 class Favorites(db.Model):
     """A users favorite campgrounds"""
