@@ -223,26 +223,6 @@ class Campground(db.Model):
     )
 
     
-  
-
-class Favorites(db.Model):
-    """A users favorite campgrounds"""
-
-    __tablename__ = 'favorites'
-
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey('users.id', ondelete='cascade'),
-        primary_key=True
-    )
-
-    camp_id = db.Column(
-        db.Integer,
-        db.ForeignKey('campground.id', ondelete='cascade'),
-        primary_key=True
-
-    )
-
     
 
 class SavedSite(db.Model):

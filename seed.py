@@ -5,6 +5,7 @@ from app import db
 from models import States
 
 db.drop_all()
+
 db.create_all()
 
 file_name = 'generator/states.csv'

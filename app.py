@@ -13,7 +13,7 @@ import xmltodict
 import pprint
 import xml.etree.cElementTree as et
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
-from models import db, connect_db, User, CampgroundData, Campground, Favorites, SavedSite, States
+from models import db, connect_db, User, CampgroundData, Campground, SavedSite, States
 from forms import UserAddForm, UserLoginForm, SearchCampground
 from sqlalchemy.exc import IntegrityError
 import numpy as np
@@ -283,19 +283,15 @@ def user_account(user_id):
 def users_saved_sites():
     user = User.query.get_or_404(g.user.id)
     
-    """ campground = Campground.query.get(user.saved_site) """
-    
-    
     campgrounds = Campground.query.filter(Campground.id.in_([n.camp_id for n in user.saved_site]))
-    print(campgrounds)
     
-       
-        
-    return jsonify([ [ { "facility_name" : c.facility_name, "facility_photo" : c.facility_photo , 
-        "state" : c.state, "facility_type" : c.facility_type} ] for c in campgrounds])
+    return jsonify([  { "facility_name" : c.facility_name, "facility_photo" : c.facility_photo , 
+        "state" : c.state, "facility_type" : c.facility_type}  for c in campgrounds])
         
         
-    
+""" @app.route('/api/users/account/recommend') 
+def recomend_sites(): """
+
     
    
 
