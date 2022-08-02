@@ -1,6 +1,7 @@
 """SQLAlchemy models for Campout"""
 
 
+from enum import unique
 from typing_extensions import Self
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
@@ -70,12 +71,11 @@ class User(db.Model):
         nullable=True 
     )
 
-    
-    
-    favorites = db.relationship(
-        'Favorites',
+    campgrounds = db.relationship(
+        'Campground',
+        secondary='saved_site',
         backref='users'
-    )
+    )    
 
     saved_site = db.relationship(
         'SavedSite',
@@ -194,12 +194,13 @@ class Campground(db.Model):
 
     camp_data_id = db.Column(
         db.Integer,
-        db.ForeignKey('campground_data.id', ondelete='CASCADE')
+        db.ForeignKey('campground_data.id', ondelete='cascade')
     )
 
     facility_name = db.Column(
         db.Text,
-        nullable=False
+        nullable=False,
+        unique=True
     )
 
     facility_photo = db.Column(

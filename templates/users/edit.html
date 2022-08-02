@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block content %}
+<div id="save-data-container" class="d-flex flex-column">
+    <div class="d-flex flex-row justify-content-center"> 
+    <div class="container p-3 mt-5" style="background-color: rgba(255, 255, 255, 0.5); border-radius: 5px;">
+        <div class="row m-5">
+            <div class="col-md-6">
+                <form method="POST" id="user_form" action="/user/account/{{user.id}}/edit">
+                    {{ form.hidden_tag() }}
+                
+                {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
+          {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          {{field.label}}
+          {{ field(placeholder=field.label.text, class="form-control") }}
+        {% endfor %}
+
+        <p>To confirm changes, enter your password:</p>
+        {% if form.password.errors %}
+          {% for error in form.password.errors %}
+            <span class="text-danger">
+            {{ error }}
+          </span>
+          {% endfor %}
+        {% endif %}
+        {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
+        <button type="submit" class="btn btn-info mt-3">Edit</button>
+        <button type="button" class="btn btn-warning mt-3 ms-3" onclick="window.location.href='/user/account/{{user.id}}'">Cancel</button>
+            </form>
+    
+            </div>
+        </div>
+        
+    </div>
+</div>
+</div>
+{% endblock %}

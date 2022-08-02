@@ -4,7 +4,6 @@ from json import dumps
 import json
 import os
 from re import U
-from webbrowser import get
 import flask_sqlalchemy
 from pandas import json_normalize
 import requests
@@ -14,7 +13,7 @@ import pprint
 import xml.etree.cElementTree as et
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from models import db, connect_db, User, CampgroundData, Campground, SavedSite, States
-from forms import UserAddForm, UserLoginForm, SearchCampground
+from forms import UserAddForm, UserLoginForm, SearchCampground, UserEditForm
 from sqlalchemy.exc import IntegrityError
 import numpy as np
 
@@ -253,14 +252,21 @@ def user_save_site(user_id):
     
     campground = Campground(camp_data_id=camp_data.id,  facility_name=request.form["facility_name"],  facility_photo=request.form["facility_photo"],
     state=request.form["state"], facility_type=request.form["facility_type"])
-
+    
+  
     db.session.add(campground)
-    db.session.flush()
+    try:
+        db.session.flush()
+    except IntegrityError:
+        flash('Site has allready been saved', 'danger')
+        return redirect('/search')        
     db.session.refresh(campground)
     save_site =SavedSite(user_id=user_id,camp_id=campground.id)
     db.session.add(save_site)
+    
     db.session.commit()
     
+       
     flash('Site has been saved', 'success')
     return redirect('/search')
     
@@ -273,29 +279,117 @@ def user_account(user_id):
         return redirect('login')
 
 
-    user = User.query.get(user_id)    
+    user = User.query.get_or_404(g.user.id)    
     campgrounds = Campground.query.filter(Campground.id.in_([n.camp_id for n in user.saved_site]))    
     
-    return render_template('users/account.html', user=g.user, campgrounds=campgrounds)  
+    return render_template('users/account.html', user=g.user, campgrounds=campgrounds)
+
+
+@app.route('/user/account/<int:user_id>/edit', methods=['GET', 'POST'])
+def edit_user_account(user_id):
+    if not g.user:
+        flash('Please register/login first', 'danger')
+        return redirect('login')
+
+    user = User.query.get_or_404(g.user.id)
+    form = UserEditForm(obj=user)
+    form.state_id.choices = [(state.short_name, state.long_name)for state in States.query.all()]
+
+    if form.validate_on_submit():
+        
+        user = User.auth(user.username, form.password.data)
+        
+        if user:
+            user.username = form.username.data
+            user.email = form.email.data
+            user.state_id = form.state_id.data
+            user.city = form.city.data
+            user.site_type = form.site_type.data
+            
+            db.session.commit()
+            
+            flash('Account updated!', 'success')
+            return redirect(f'/user/account/{user.id}')
+        
+        flash('Incorrect password', 'danger') 
+        return redirect(f'/user/account/{user.id}')   
+        
+    return render_template('/users/edit.html', form=form, user=user)
+
+
 
 
 @app.route('/api/users/account/saved')
 def users_saved_sites():
+    if not g.user:
+        return jsonify([{"auth_required" : 'Please Login'}])
+
+    
     user = User.query.get_or_404(g.user.id)
     
     campgrounds = Campground.query.filter(Campground.id.in_([n.camp_id for n in user.saved_site]))
+    
     
     return jsonify([  { "facility_name" : c.facility_name, "facility_photo" : c.facility_photo , 
         "state" : c.state, "facility_type" : c.facility_type}  for c in campgrounds])
         
         
-""" @app.route('/api/users/account/recommend') 
-def recomend_sites(): """
 
     
+@app.route('/api/user/account/saved/<facility_name>/delete', methods=['POST'])
+def delete_saved_site(facility_name):
+    if not g.user:
+        return jsonify([{"auth_required" : 'Please Login'}])
+
+    campground = Campground.query.filter_by(facility_name=facility_name).first()
+    campground_data = CampgroundData.query.get(campground.camp_data_id)
+    print(campground)
+    saved_site = SavedSite.query.filter(SavedSite.camp_id == campground.id).first()
+    print(saved_site)
+    
+    db.session.delete(saved_site)
+    db.session.delete(campground)
+    db.session.delete(campground_data)
+    db.session.commit()
+
+    flash('Saved site removed', 'success')
+    return redirect(f'/user/account/{g.user.id}')
+
+
+@app.route('/api/user/account/recommend')
+def recommend_sites():
+    if not g.user:
+        return jsonify([{"auth_required" : 'Please Login'}])
+        
+    user = User.query.get_or_404(g.user.id)
+    user_campgrounds = user.campgrounds
+    camp_data = [[data.facility_name, data.amenities] for data in user_campgrounds]
+    
+    if len(user.campgrounds) == 0:
+        return jsonify([{"no_saves" : 'Please save a site for recommendations.'}]) 
+    
+    response = requests.get(
+            API_URL+TOKEN,
+            params=[('landmarkName',camp_data[0][0]), ('landmarkLat',camp_data[0][1].landmark_lat), ('landmarkLong', camp_data[0][1].landmark_long)]
+        )
+    if response:
+            dict_data = xmltodict.parse(response.content)
+            
+            try:
+                result = dict_data['resultset']['result']
+                print(result)
+                
+                
+            except KeyError:
+                flash('Invalid search. Make sure fields are valid', 'danger')
+                return redirect('/search')
+
+    else:
+        print('failed')
+
+    return jsonify(result[1:7])                    
    
-
-
+       
 
 @app.errorhandler(404)
 def page_not_found(e):
