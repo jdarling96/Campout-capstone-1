@@ -99,12 +99,22 @@ async function getRecommend(){
 }
 
 function displayRec(data) {
-  
-  data.forEach(element => {
-    let {facility_name,facility_photo, facility_type, state} = element
-    if(facility_photo === "http://www.reserveamerica.com/images/nophoto.jpg"){
+  userId = data[0].user_id
+  data[1].forEach(element =>  {
+    let {'@facilityName': facility_name,'@faciltyPhoto': facility_photo,'@state':state,
+    '@contractType':facility_type,'@sitesWithAmps': amps, '@sitesWithPetsAllowed': pets, '@sitesWithSewerHookup': sewer,
+    '@sitesWithWaterHookup': water, '@sitesWithWaterfront': waterfront,'@longitude': landmark_long,'@latitude': landmark_lat  } = element
+    console.log(facility_name)
+    if(facility_photo === "/images/nophoto.jpg"){
       facility_photo = "/static/images/generic-campsite.jpg"
-    }
+    } 
+    else{
+      facility_photo = "http://www.reserveamerica.com"+{facility_photo}
+      
+
+    }  
+      
+    
     
     const $display = $(
       `<div class="row"> 
@@ -113,28 +123,49 @@ function displayRec(data) {
        </div>
        </div>
        <div class="row">
-       <div class="col m-2">
+       <div class="col">
           <p class="h6">Park: ${facility_name}</p>
+          <form action="/search/save/users/${userId}" method='POST'>
+          <input name="facility_photo" type="hidden" value="${facility_photo}">
+          <input name="facility_name" type="hidden" value="${facility_name}">
+          <input name="state" type="hidden" value="${state}">
+          <input name="facility_type" type="hidden" value="${facility_type}">
+          <input name="amps" type="hidden" value="${amps}">
+          <input name="pets" type="hidden" value="${pets}">
+          <input name="water" type="hidden" value="${water}">
+          <input name="sewer" type="hidden" value="${sewer}">
+          <input name="waterfront" type="hidden" value="${waterfront}">
+          <input name="eq_length" type="hidden" value="{{result_set['@eqplen']}}">
+          <input name="landmark_lat" type="hidden" value="${landmark_lat}">
+          <input name="landmark_long" type="hidden" value="${landmark_long}">
+          <button type="submit" class="btn btn-outline-secondary btn-sm mt-1"><i class="fa-solid fa-bookmark"></i></button>
+          </form>
+          </div>
+      <div class="col">  
           <p class="h6">State: ${state}</p>
           <p class="h6 mb-2">Type: ${facility_type}</p>
-          <form action="/api/user/account/saved/${facility_name}/delete" method='POST'>
-          <button type="submit" class="btn btn-outline-danger btn-sm mt-1"><i class="fa-solid fa-trash"></i></button>
-          </form>
-       </div>
+          </div>
+          <div class="col">
+          <p class="h6 mb-2">Type: ${amps}</p>
+          <p class="h6 mb-2">Type: ${pets}</p>
+          <p class="h6 mb-2">Type: ${sewer}</p>
+          <p class="h6 mb-2">Type: ${water}</p>
+          <p class="h6 mb-2">Type: ${waterfront}</p>
+          </div>
+          </div>
+          
       
-     </div>
+      
+     
      `);
     
-    $('#saved-campsites-container').append($display)
+    $('#recommend-campsites-container').append($display)
   
   });
-  $('#saved-campsites-container').show()
+  $('#recommend-campsites-container').show()
 
  
 }
-
-
-
 
 
 

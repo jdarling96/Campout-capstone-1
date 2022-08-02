@@ -259,7 +259,7 @@ def user_save_site(user_id):
         db.session.flush()
     except IntegrityError:
         flash('Site has allready been saved', 'danger')
-        return redirect('/search')        
+        return redirect('/')        
     db.session.refresh(campground)
     save_site =SavedSite(user_id=user_id,camp_id=campground.id)
     db.session.add(save_site)
@@ -377,7 +377,8 @@ def recommend_sites():
             
             try:
                 result = dict_data['resultset']['result']
-                print(result)
+                wow = result[:5]
+                
                 
                 
             except KeyError:
@@ -387,7 +388,7 @@ def recommend_sites():
     else:
         print('failed')
 
-    return jsonify(result[1:7])                    
+    return jsonify([{'user_id':g.user.id},result[1:7]])                    
    
        
 
