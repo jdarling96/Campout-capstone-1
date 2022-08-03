@@ -1,8 +1,4 @@
 """SQLAlchemy models for Campout"""
-
-
-from enum import unique
-from typing_extensions import Self
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 

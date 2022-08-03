@@ -1,16 +1,6 @@
-from crypt import methods
-import email
-from json import dumps
-import json
 import os
-from re import U
-import flask_sqlalchemy
-from pandas import json_normalize
 import requests
-from sqlalchemy import JSON
 import xmltodict
-import pprint
-import xml.etree.cElementTree as et
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from models import db, connect_db, User, CampgroundData, Campground, SavedSite, States
 from forms import UserAddForm, UserLoginForm, SearchCampground, UserEditForm
@@ -152,7 +142,14 @@ def login():
 
     return render_template('users/login.html', form=form)    
 
+@app.route('/logout')
+def logout():
+    """Handle logout of user."""
 
+    do_logout()
+
+    flash('You have been logged out', 'success')
+    return redirect('/')
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_campgrounds_form():
@@ -220,26 +217,10 @@ def user_save_site(user_id):
         flash('Please register/login first', 'danger')
         return redirect('login')
 
-      
-
-    
     print(request.form["state"],request.form["facility_photo"],
     request.form["facility_name"], request.form["facility_type"])
     
-    """   request.form["facility_photo"]
-    request.form["facility_name"] 
-    request.form["state"] 
-    request.form["facility_type"] 
-    request.form["amps"]
-    request.form["pets"]
-    request.form["water"] 
-    request.form["sewer"] 
-    request.form["waterfront"] 
-    
-    request.form['latitude']
-    request.form['longitude']
-     """
-    
+   
     camp_data = CampgroundData(pets=request.form["pets"], water=request.form["water"], sewer=request.form["sewer"],
     amps=request.form["amps"], waterfront=request.form["waterfront"], landmark_lat=request.form['landmark_lat'],
     landmark_long=request.form['landmark_long'])
@@ -248,8 +229,6 @@ def user_save_site(user_id):
     db.session.refresh(camp_data)
     
         
-    """ camp_data_id = CampgroundData.query.filter(CampgroundData.landmark_lat == request.form['@latitude']) """
-    
     campground = Campground(camp_data_id=camp_data.id,  facility_name=request.form["facility_name"],  facility_photo=request.form["facility_photo"],
     state=request.form["state"], facility_type=request.form["facility_type"])
     
@@ -259,7 +238,7 @@ def user_save_site(user_id):
         db.session.flush()
     except IntegrityError:
         flash('Site has allready been saved', 'danger')
-        return redirect('/')        
+        return redirect('/search')        
     db.session.refresh(campground)
     save_site =SavedSite(user_id=user_id,camp_id=campground.id)
     db.session.add(save_site)
@@ -268,7 +247,7 @@ def user_save_site(user_id):
     
        
     flash('Site has been saved', 'success')
-    return redirect('/search')
+    return redirect(request.referrer)
     
 
 
@@ -366,7 +345,7 @@ def recommend_sites():
     camp_data = [[data.facility_name, data.amenities] for data in user_campgrounds]
     
     if len(user.campgrounds) == 0:
-        return jsonify([{"no_saves" : 'Please save a site for recommendations.'}]) 
+        return jsonify([]) 
     
     response = requests.get(
             API_URL+TOKEN,

@@ -1,64 +1,72 @@
-
-
 /* const el = $('#div1') */
 
+const $btns = [
+  $("#btn1"),
+  $("#btn2"),
+  $("#btn3"),
+  $("#btn4"),
+  $("#btn5"),
+  $("#btn6"),
+];
+const $div = [
+  $(".col-6.mt-5.first"),
+  $(".col-6.mt-5.second"),
+  $(".col-6.mt-5.third"),
+  $(".col-6.mt-5.fourth"),
+  $(".col-6.mt-5.fith"),
+  $(".col-6.mt-5.six"),
+];
 
-const btns = [$('#btn1'),$('#btn2'),$('#btn3'),$('#btn4'),$('#btn5'),$('#btn6')];
-const div = [$('.col-6.mt-5.first'),$('.col-6.mt-5.second'),$('.col-6.mt-5.third'),$('.col-6.mt-5.fourth'),$('.col-6.mt-5.fith'),$('.col-6.mt-5.six')];
-
-
-
-
-for(let btn of btns){
-  btn.click(function() {
-      div.forEach(function(element){
-        element.hide()
-      });
-      shw = btns.indexOf(btn)
-      div[shw].show()
-      $(window).scrollTop(0);
-    })
-  
+for (let btn of $btns) {
+  btn.click(function () {
+    $div.forEach(function (element) {
+      element.hide();
+    });
+    shw = $btns.indexOf(btn);
+    $div[shw].show();
+    $(window).scrollTop(0);
+  });
 }
 
-$('#saved-sites').click(function(){
-  getSaves()
-  
+$("#saved-sites").click(function () {
+  getSaves();
 
-  $('#saved-sites').off('click').on('click', function(){
-    
-    if($('#saved-campsites-container').is(":visible")) {
-      $('#saved-campsites-container').hide();
-    }
-    else {
-      $('#saved-campsites-container').show();
-
-    }
-      
-  
-    
-  });
-  
-})
+  $("#saved-sites")
+    .off("click")
+    .on("click", function () {
+      if ($("#saved-campsites-container").is(":visible")) {
+        $("#saved-campsites-container").hide();
+        $("#save-data-container").css("height", "100%");
+      } else if ($("#recommend-campsites-container").is(":visible")) {
+        $("#save-data-container").css("height", "auto");
+      } else {
+        $("#saved-campsites-container").show();
+      }
+    });
+});
 
 async function getSaves() {
-  let res = await axios.get('http://127.0.0.1:5000/api/users/account/saved')
-  console.log(res.data)
-  if(res.data.length === 0){
-    $('#saved-sites').off('click')
-    return
+  let res = await axios.get("http://127.0.0.1:5000/api/users/account/saved");
+  console.log(res.data);
+
+  if (res.data.length === 0) {
+    $("#saved-sites").off("click");
+    return;
   }
-  displaySaves(res.data)
+  if (res.data.length >= 4) {
+    $("#save-data-container").css("height", "auto");
+  }
+
+  displaySaves(res.data);
 }
 
 function displaySaves(data) {
-  
-  data.forEach(element => {
-    let {facility_name,facility_photo, facility_type, state} = element
-    if(facility_photo === "http://www.reserveamerica.com/images/nophoto.jpg"){
-      facility_photo = "/static/images/generic-campsite.jpg"
+  data.forEach((element) => {
+    let { facility_name, facility_photo, facility_type, state } = element;
+    if (facility_photo === "http://www.reserveamerica.com/images/nophoto.jpg") {
+      facility_photo = "/static/images/generic-campsite.jpg";
     }
-    
+
     const $display = $(
       `<div class="row"> 
        <div class="col">
@@ -76,46 +84,66 @@ function displaySaves(data) {
        </div>
       
      </div>
-     `);
-    
-    $('#saved-campsites-container').append($display)
-  
-  });
-  $('#saved-campsites-container').show()
+     `
+    );
 
- 
+    $("#saved-campsites-container").append($display);
+  });
+  $("#saved-campsites-container").show();
 }
 
+$("#recommend-sites").click(function () {
+  getRecommend();
 
-$('#recommend-sites').click(function(){
-  getRecommend()
-})
+  $("#recommend-sites")
+    .off("click")
+    .on("click", function () {
+      if ($("#recommend-campsites-container").is(":visible")) {
+        $("#recommend-campsites-container").hide();
+        $("#save-data-container").css("height", "100%");
+      } else if ($("#saved-campsites-container").is(":visible")) {
+        $("#save-data-container").css("height", "100%");
+      } else {
+        $("#recommend-campsites-container").show();
+        $("#save-data-container").css("height", "auto");
+      }
+    });
+});
 
-async function getRecommend(){
-  let res = await axios.get('http://127.0.0.1:5000/api/user/account/recommend')
-  console.log(res.data)
-
-  displayRec(res.data)
+async function getRecommend() {
+  let res = await axios.get("http://127.0.0.1:5000/api/user/account/recommend");
+  console.log(res.data);
+  if (res.data.length === 0) {
+    $("#recommend-sites").off("click");
+    return;
+  }
+  $("#save-data-container").css("height", "auto");
+  displayRec(res.data);
 }
 
 function displayRec(data) {
-  userId = data[0].user_id
-  data[1].forEach(element =>  {
-    let {'@facilityName': facility_name,'@faciltyPhoto': facility_photo,'@state':state,
-    '@contractType':facility_type,'@sitesWithAmps': amps, '@sitesWithPetsAllowed': pets, '@sitesWithSewerHookup': sewer,
-    '@sitesWithWaterHookup': water, '@sitesWithWaterfront': waterfront,'@longitude': landmark_long,'@latitude': landmark_lat  } = element
-    console.log(facility_name)
-    if(facility_photo === "/images/nophoto.jpg"){
-      facility_photo = "/static/images/generic-campsite.jpg"
-    } 
-    else{
-      facility_photo = "http://www.reserveamerica.com"+{facility_photo}
-      
+  userId = data[0].user_id;
+  data[1].forEach((element) => {
+    let {
+      "@facilityName": facility_name,
+      "@faciltyPhoto": facility_photo,
+      "@state": state,
+      "@contractType": facility_type,
+      "@sitesWithAmps": amps,
+      "@sitesWithPetsAllowed": pets,
+      "@sitesWithSewerHookup": sewer,
+      "@sitesWithWaterHookup": water,
+      "@sitesWithWaterfront": waterfront,
+      "@longitude": landmark_long,
+      "@latitude": landmark_lat,
+    } = element;
+    console.log(facility_name);
+    if (facility_photo !== "/images/nophoto.jpg") {
+      facility_photo = `http://www.reserveamerica.com${facility_photo}`;
+    } else {
+      facility_photo = "/static/images/generic-campsite.jpg";
+    }
 
-    }  
-      
-    
-    
     const $display = $(
       `<div class="row"> 
        <div class="col">
@@ -153,19 +181,10 @@ function displayRec(data) {
           <p class="h6 mb-2">Type: ${waterfront}</p>
           </div>
           </div>
-          
-      
-      
-     
-     `);
-    
-    $('#recommend-campsites-container').append($display)
-  
+        `
+    );
+
+    $("#recommend-campsites-container").append($display);
   });
-  $('#recommend-campsites-container').show()
-
- 
+  $("#recommend-campsites-container").show();
 }
-
-
-

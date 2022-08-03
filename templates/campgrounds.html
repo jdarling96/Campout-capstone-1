@@ -106,17 +106,21 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/search/save/users/{{user.id}}" method="post">
-                                <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
-                                <input type="hidden" value="{{key['@facilityName']}}">
-                                <input type="hidden" value="{{key['@state']}}">
-                                <input type="hidden" value="{{key['@contractType']}}">
-                                <input type="hidden" value="{{key['@sitesWithAmps']}}">
-                                <input type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithSewerHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                            <form action="/search/save/users/{{user.id}}" method='POST'>
+                                <input name="facility_photo" type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
+                                <input name="facility_name" type="hidden" value="{{key['@facilityName']}}">
+                                <input name="state" type="hidden" value="{{key['@state']}}">
+                                <input name="facility_type" type="hidden" value="{{key['@contractType']}}">
+                                <input name="amps" type="hidden" value="{{key['@sitesWithAmps']}}">
+                                <input name="pets" type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
+                                <input name="water" type="hidden" value="{{key['@sitesWithWaterHookup']}}">
+                                <input name="sewer" type="hidden" value="{{key['@sitesWithSewerHookup']}}">
+                                <input name="waterfront" type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                                <input name="eq_length" type="hidden" value="{{result_set['@eqplen']}}">
+                                <input name="landmark_lat" type="hidden" value="{{key['@latitude']}}">
+                                <input name="landmark_long" type="hidden" value="{{key['@longitude']}}">
                             <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-bookmark"></i></button>
+                        </form>
                         </form>
                         </div>
                     </div>
@@ -157,17 +161,21 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/search/save/users/{{user.id}}" method="post">
-                                <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
-                                <input type="hidden" value="{{key['@facilityName']}}">
-                                <input type="hidden" value="{{key['@state']}}">
-                                <input type="hidden" value="{{key['@contractType']}}">
-                                <input type="hidden" value="{{key['@sitesWithAmps']}}">
-                                <input type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithSewerHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                            <form action="/search/save/users/{{user.id}}" method='POST'>
+                                <input name="facility_photo" type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
+                                <input name="facility_name" type="hidden" value="{{key['@facilityName']}}">
+                                <input name="state" type="hidden" value="{{key['@state']}}">
+                                <input name="facility_type" type="hidden" value="{{key['@contractType']}}">
+                                <input name="amps" type="hidden" value="{{key['@sitesWithAmps']}}">
+                                <input name="pets" type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
+                                <input name="water" type="hidden" value="{{key['@sitesWithWaterHookup']}}">
+                                <input name="sewer" type="hidden" value="{{key['@sitesWithSewerHookup']}}">
+                                <input name="waterfront" type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                                <input name="eq_length" type="hidden" value="{{result_set['@eqplen']}}">
+                                <input name="landmark_lat" type="hidden" value="{{key['@latitude']}}">
+                                <input name="landmark_long" type="hidden" value="{{key['@longitude']}}">
                             <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-bookmark"></i></button>
+                        </form>
                         </form>
                         </div>
                     </div>
@@ -208,17 +216,21 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/search/save/users/{{user.id}}" method="post">
-                                <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
-                                <input type="hidden" value="{{key['@facilityName']}}">
-                                <input type="hidden" value="{{key['@state']}}">
-                                <input type="hidden" value="{{key['@contractType']}}">
-                                <input type="hidden" value="{{key['@sitesWithAmps']}}">
-                                <input type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithSewerHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                            <form action="/search/save/users/{{user.id}}" method='POST'>
+                                <input name="facility_photo" type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
+                                <input name="facility_name" type="hidden" value="{{key['@facilityName']}}">
+                                <input name="state" type="hidden" value="{{key['@state']}}">
+                                <input name="facility_type" type="hidden" value="{{key['@contractType']}}">
+                                <input name="amps" type="hidden" value="{{key['@sitesWithAmps']}}">
+                                <input name="pets" type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
+                                <input name="water" type="hidden" value="{{key['@sitesWithWaterHookup']}}">
+                                <input name="sewer" type="hidden" value="{{key['@sitesWithSewerHookup']}}">
+                                <input name="waterfront" type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                                <input name="eq_length" type="hidden" value="{{result_set['@eqplen']}}">
+                                <input name="landmark_lat" type="hidden" value="{{key['@latitude']}}">
+                                <input name="landmark_long" type="hidden" value="{{key['@longitude']}}">
                             <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-bookmark"></i></button>
+                        </form>
                         </form>
                         </div>
                     </div>
@@ -259,17 +271,21 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/search/save/users/{{user.id}}" method="post">
-                                <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
-                                <input type="hidden" value="{{key['@facilityName']}}">
-                                <input type="hidden" value="{{key['@state']}}">
-                                <input type="hidden" value="{{key['@contractType']}}">
-                                <input type="hidden" value="{{key['@sitesWithAmps']}}">
-                                <input type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithSewerHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                            <form action="/search/save/users/{{user.id}}" method='POST'>
+                                <input name="facility_photo" type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
+                                <input name="facility_name" type="hidden" value="{{key['@facilityName']}}">
+                                <input name="state" type="hidden" value="{{key['@state']}}">
+                                <input name="facility_type" type="hidden" value="{{key['@contractType']}}">
+                                <input name="amps" type="hidden" value="{{key['@sitesWithAmps']}}">
+                                <input name="pets" type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
+                                <input name="water" type="hidden" value="{{key['@sitesWithWaterHookup']}}">
+                                <input name="sewer" type="hidden" value="{{key['@sitesWithSewerHookup']}}">
+                                <input name="waterfront" type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                                <input name="eq_length" type="hidden" value="{{result_set['@eqplen']}}">
+                                <input name="landmark_lat" type="hidden" value="{{key['@latitude']}}">
+                                <input name="landmark_long" type="hidden" value="{{key['@longitude']}}">
                             <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-bookmark"></i></button>
+                        </form>
                         </form>
                         </div>
                     </div>
@@ -310,17 +326,21 @@
                     </div>
                     <div class="row">
                         <div class="col mt-1 mb-2">
-                            <form action="/search/save/users/{{user.id}}" method="post">
-                                <input type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
-                                <input type="hidden" value="{{key['@facilityName']}}">
-                                <input type="hidden" value="{{key['@state']}}">
-                                <input type="hidden" value="{{key['@contractType']}}">
-                                <input type="hidden" value="{{key['@sitesWithAmps']}}">
-                                <input type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithSewerHookup']}}">
-                                <input type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                            <form action="/search/save/users/{{user.id}}" method='POST'>
+                                <input name="facility_photo" type="hidden" value="http://www.reserveamerica.com{{key['@faciltyPhoto']}}">
+                                <input name="facility_name" type="hidden" value="{{key['@facilityName']}}">
+                                <input name="state" type="hidden" value="{{key['@state']}}">
+                                <input name="facility_type" type="hidden" value="{{key['@contractType']}}">
+                                <input name="amps" type="hidden" value="{{key['@sitesWithAmps']}}">
+                                <input name="pets" type="hidden" value="{{key['@sitesWithPetsAllowed']}}">
+                                <input name="water" type="hidden" value="{{key['@sitesWithWaterHookup']}}">
+                                <input name="sewer" type="hidden" value="{{key['@sitesWithSewerHookup']}}">
+                                <input name="waterfront" type="hidden" value="{{key['@sitesWithWaterfront']}}">
+                                <input name="eq_length" type="hidden" value="{{result_set['@eqplen']}}">
+                                <input name="landmark_lat" type="hidden" value="{{key['@latitude']}}">
+                                <input name="landmark_long" type="hidden" value="{{key['@longitude']}}">
                             <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-bookmark"></i></button>
+                        </form>
                         </form>
                         </div>
                     </div>
