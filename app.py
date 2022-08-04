@@ -80,6 +80,11 @@ def register_user():
     If the there already is a user with that username: flash message
     and re-present form.
     """
+    if g.user:
+        flash('Allready logged in', 'danger')
+        return redirect('/') 
+
+
     form = UserAddForm()
     form.state_id.choices = [(state.short_name, state.long_name)for state in States.query.all()]
     
@@ -122,7 +127,10 @@ def login():
     If form not valid, present form.
     if authentication is TRUE do_login()
     Redirect to Homepage.
-    """    
+    """ 
+    if g.user:
+        flash('Allready logged in', 'danger')
+        return redirect('/')    
 
     form = UserLoginForm()
 
@@ -221,10 +229,7 @@ def user_save_site(facility_name):
         flash('Please register/login first', 'danger')
         return redirect('login')
 
-    print(request.form["state"],request.form["facility_photo"],
-    request.form["facility_name"], request.form["facility_type"])
     
-   
     camp_data = CampgroundData(pets=request.form["pets"], water=request.form["water"], sewer=request.form["sewer"],
     amps=request.form["amps"], waterfront=request.form["waterfront"], landmark_lat=request.form['landmark_lat'],
     landmark_long=request.form['landmark_long'])
@@ -333,6 +338,7 @@ def delete_saved_site(facility_name):
         return jsonify([{"auth_required" : 'Please Login'}])
 
     campground = Campground.query.filter_by(facility_name=facility_name).first()
+    
     campground_data = CampgroundData.query.get(campground.camp_data_id)
     print(campground)
     saved_site = SavedSite.query.filter(SavedSite.camp_id == campground.id).first()
