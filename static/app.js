@@ -153,7 +153,7 @@ function displayRec(data) {
        <div class="row">
        <div class="col">
           <p class="h6">Park: ${facility_name}</p>
-          <form action="/search/save/users/${userId}" method='POST'>
+          <form action="/search/save/${facility_name}" method='POST'>
           <input name="facility_photo" type="hidden" value="${facility_photo}">
           <input name="facility_name" type="hidden" value="${facility_name}">
           <input name="state" type="hidden" value="${state}">

@@ -153,6 +153,9 @@ def logout():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_campgrounds_form():
+    """Return search form that contains up to 12 
+    filters to search for campgrounds from Active Networks API. Displays filtered campground results"""
+    
     if not g.user:
         flash('Please register/login first', 'danger')
         return redirect('login')  
@@ -210,9 +213,10 @@ def search_campgrounds_form():
     return render_template('search.html', form=form)
 
 
-@app.route('/search/save/users/<int:user_id>', methods=['POST'])
-def user_save_site(user_id):
-    """Save campsites for users"""
+@app.route('/search/save/<facility_name>', methods=['POST'])
+def user_save_site(facility_name):
+    """Save campground to db and users saved sites"""
+    
     if not g.user.id:
         flash('Please register/login first', 'danger')
         return redirect('login')
@@ -238,9 +242,9 @@ def user_save_site(user_id):
         db.session.flush()
     except IntegrityError:
         flash('Site has allready been saved', 'danger')
-        return redirect('/search')        
+        return redirect(request.referrer)        
     db.session.refresh(campground)
-    save_site =SavedSite(user_id=user_id,camp_id=campground.id)
+    save_site =SavedSite(user_id=g.user.id,camp_id=campground.id)
     db.session.add(save_site)
     
     db.session.commit()
@@ -253,6 +257,8 @@ def user_save_site(user_id):
 
 @app.route('/user/account/<int:user_id>')
 def user_account(user_id):
+    """Users account for saved sites and a recommendation list based off of saved sites"""
+    
     if not g.user:
         flash('Please register/login first', 'danger')
         return redirect('login')
@@ -266,6 +272,8 @@ def user_account(user_id):
 
 @app.route('/user/account/<int:user_id>/edit', methods=['GET', 'POST'])
 def edit_user_account(user_id):
+    """Edits user account info if user authentication is True"""
+    
     if not g.user:
         flash('Please register/login first', 'danger')
         return redirect('login')
@@ -300,6 +308,8 @@ def edit_user_account(user_id):
 
 @app.route('/api/users/account/saved')
 def users_saved_sites():
+    """Returns a users saved sites in JSON if user is authenticated"""
+    
     if not g.user:
         return jsonify([{"auth_required" : 'Please Login'}])
 
@@ -317,6 +327,8 @@ def users_saved_sites():
     
 @app.route('/api/user/account/saved/<facility_name>/delete', methods=['POST'])
 def delete_saved_site(facility_name):
+    """Removes a site from a users saved sites if user is authenticated"""
+    
     if not g.user:
         return jsonify([{"auth_required" : 'Please Login'}])
 
@@ -337,6 +349,9 @@ def delete_saved_site(facility_name):
 
 @app.route('/api/user/account/recommend')
 def recommend_sites():
+    """Returns a list of recommended sites in JSON if user is authenticated.
+    recommended sites are based off of users saved sites"""
+    
     if not g.user:
         return jsonify([{"auth_required" : 'Please Login'}])
         
