@@ -1,13 +1,15 @@
 from distutils.command.config import config
 from fileinput import filename
 import os
+import re
 import pandas as pd
 from sqlalchemy import false
 from app import db, app
 from models import States
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///campout'))
+uri = os.getenv("DATABASE_URL")  # or other relevant config var
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)  
 db.drop_all()
 
 db.create_all()
