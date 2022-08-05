@@ -1,7 +1,7 @@
 /* const el = $('#div1') */
 let getUrl = window.location;
-let baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[0];
-
+let baseUrl =
+  getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split("/")[0];
 
 const $btns = [
   $("#btn1"),
@@ -50,7 +50,6 @@ $("#saved-sites").click(function () {
 
 async function getSaves() {
   let res = await axios.get(`${baseUrl}api/users/account/saved`);
-  
 
   if (res.data.length === 0) {
     $("#saved-sites").off("click");
@@ -115,7 +114,7 @@ $("#recommend-sites").click(function () {
 
 async function getRecommend() {
   let res = await axios.get(`${baseUrl}api/user/account/recommend`);
-  
+
   if (res.data.length === 0) {
     $("#recommend-sites").off("click");
     return;
@@ -140,7 +139,7 @@ function displayRec(data) {
       "@longitude": landmark_long,
       "@latitude": landmark_lat,
     } = element;
-    
+
     if (facility_photo !== "/images/nophoto.jpg") {
       facility_photo = `http://www.reserveamerica.com${facility_photo}`;
     } else {
@@ -191,3 +190,4 @@ function displayRec(data) {
   });
   $("#recommend-campsites-container").show();
 }
+
