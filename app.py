@@ -1,4 +1,5 @@
 import os
+import re
 import requests
 import xmltodict
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
@@ -16,6 +17,10 @@ app = Flask(__name__)
 app.debug = False
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///campout'))
+
+uri = os.getenv("DATABASE_URL")  # or other relevant config var
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)    
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False 
