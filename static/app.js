@@ -1,4 +1,7 @@
 /* const el = $('#div1') */
+let getUrl = window.location;
+let baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[0];
+
 
 const $btns = [
   $("#btn1"),
@@ -46,8 +49,8 @@ $("#saved-sites").click(function () {
 });
 
 async function getSaves() {
-  let res = await axios.get("http://127.0.0.1:5000/api/users/account/saved");
-  console.log(res.data);
+  let res = await axios.get(`${baseUrl}api/users/account/saved`);
+  
 
   if (res.data.length === 0) {
     $("#saved-sites").off("click");
@@ -111,7 +114,7 @@ $("#recommend-sites").click(function () {
 });
 
 async function getRecommend() {
-  let res = await axios.get("http://127.0.0.1:5000/api/user/account/recommend");
+  let res = await axios.get(`${baseUrl}api/user/account/recommend`);
   
   if (res.data.length === 0) {
     $("#recommend-sites").off("click");
