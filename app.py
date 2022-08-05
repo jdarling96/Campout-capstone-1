@@ -7,28 +7,20 @@ from models import db, connect_db, User, CampgroundData, Campground, SavedSite, 
 from forms import UserAddForm, UserLoginForm, SearchCampground, UserEditForm
 from sqlalchemy.exc import IntegrityError
 import numpy as np
-
-
 from flask_debugtoolbar import DebugToolbarExtension
 from bs4 import BeautifulSoup
+
+uri = os.environ.get('DATABASE_URL', 'postgresql:///campout')
+if uri.startswith("postgres://"):
+ uri = uri.replace("postgres://", "postgresql://", 1)
 
 app = Flask(__name__)
 
 app.debug = False
-
-uri = os.getenv("DATABASE_URL")  # or other relevant config var
-if uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('uri', 'postgresql:///campout'))   
-
-
-
+app.config["SQLALCHEMY_DATABASE_URI"] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False 
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "campout")
 
 toolbar = DebugToolbarExtension(app)
