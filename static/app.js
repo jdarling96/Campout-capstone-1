@@ -56,7 +56,7 @@ async function getSaves() {
     $("#saved-sites").off("click");
     return;
   }
-  if (res.data.length >= 4) {
+  if (res.data.length >= 3) {
     $("#save-data-container").css("height", "auto");
   }
 
