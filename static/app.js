@@ -112,7 +112,7 @@ $("#recommend-sites").click(function () {
 
 async function getRecommend() {
   let res = await axios.get("http://127.0.0.1:5000/api/user/account/recommend");
-  console.log(res.data);
+  
   if (res.data.length === 0) {
     $("#recommend-sites").off("click");
     return;
@@ -137,7 +137,7 @@ function displayRec(data) {
       "@longitude": landmark_long,
       "@latitude": landmark_lat,
     } = element;
-    console.log(facility_name);
+    
     if (facility_photo !== "/images/nophoto.jpg") {
       facility_photo = `http://www.reserveamerica.com${facility_photo}`;
     } else {
