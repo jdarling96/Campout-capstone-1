@@ -340,9 +340,9 @@ def delete_saved_site(facility_name):
     campground = Campground.query.filter_by(facility_name=facility_name).first()
     
     campground_data = CampgroundData.query.get(campground.camp_data_id)
-    print(campground)
+    
     saved_site = SavedSite.query.filter(SavedSite.camp_id == campground.id).first()
-    print(saved_site)
+    
     
     db.session.delete(saved_site)
     db.session.delete(campground)
