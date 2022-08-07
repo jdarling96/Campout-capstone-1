@@ -7,6 +7,7 @@ from models import db, connect_db, User, CampgroundData, Campground, SavedSite, 
 from forms import UserAddForm, UserLoginForm, SearchCampground, UserEditForm
 from sqlalchemy.exc import IntegrityError
 import numpy as np
+from numpy import AxisError
 from flask_debugtoolbar import DebugToolbarExtension
 from bs4 import BeautifulSoup
 
@@ -182,33 +183,40 @@ def search_campgrounds_form():
         (form.sewer.name, form.sewer.data),(form.water.name, form.water.data),(form.pull.name, form.pull.data),
         (form.pets.name, form.pets.data),(form.waterfront.name, form.waterfront.data)]
         data = [(k,v) for (k,v) in form_data if v not in ['',0,None]]
-        """ print(data)  """
+        
         
         
 
         response = requests.get(
             API_URL+TOKEN,
             params=[(k,v) for (k,v) in data]
+            
         )
+        
         if response:
+            
             dict_data = xmltodict.parse(response.content)
             result_set = dict_data['resultset']
             try:
-                result = dict_data['resultset']['result'] 
-                if len(result) < 24:
+                result = dict_data['resultset']['result']
+                """ print(dict_data['resultset']) """
+                if len(result) == 19:
+                    wow = [[result]]
+                    camps = wow
+                if len(result) < 19:
                     camps = np.array_split(result, 1)
-                    print(len(camps))
+                    
                 if len(result) >= 24:
                     camps = np.array_split(result, 2)
-                    print(len(camps))
+                    
                 if len(result) >= 50:
                     camps = np.array_split(result, 4)
-                    print(len(camps))
+                    
                 if len(result) >= 100:
                     camps = np.array_split(result, 6)
-                    print(len(camps))
-            except KeyError:
-                flash('Invalid search. Make sure fields are valid', 'danger')
+                    
+            except (KeyError):
+                flash('Invalid search. Zero campsites found.', 'danger')
                 return redirect('/search')
 
 
@@ -245,13 +253,21 @@ def user_save_site(facility_name):
     
   
     db.session.add(campground)
-    try:
-        db.session.flush()
-    except IntegrityError:
-        flash('Site has allready been saved', 'danger')
-        return redirect(request.referrer)        
+    db.session.flush()
     db.session.refresh(campground)
-    save_site =SavedSite(user_id=g.user.id,camp_id=campground.id)
+    user = User.query.get(g.user.id)
+    campgrounds = Campground.query.filter(Campground.id.in_([c.camp_id for c in user.saved_site]))
+    stored_site = [c.facility_name for c in campgrounds]
+    
+    if facility_name in stored_site:
+        flash('Site already saved', 'danger')
+        return redirect(request.referrer)
+
+    
+    save_site = SavedSite(user_id=g.user.id,camp_id=campground.id)
+   
+
+    
     db.session.add(save_site)
     
     db.session.commit()
@@ -262,8 +278,8 @@ def user_save_site(facility_name):
     
 
 
-@app.route('/user/account/<int:user_id>')
-def user_account(user_id):
+@app.route('/user/account/')
+def user_account():
     """Users account for saved sites and a recommendation list based off of saved sites"""
     
     if not g.user:
@@ -277,8 +293,8 @@ def user_account(user_id):
     return render_template('users/account.html', user=g.user, campgrounds=campgrounds)
 
 
-@app.route('/user/account/<int:user_id>/edit', methods=['GET', 'POST'])
-def edit_user_account(user_id):
+@app.route('/user/account/edit', methods=['GET', 'POST'])
+def edit_user_account():
     """Edits user account info if user authentication is True"""
     
     if not g.user:
@@ -352,7 +368,7 @@ def delete_saved_site(facility_name):
     db.session.commit()
 
     flash('Saved site removed', 'success')
-    return redirect(f'/user/account/{g.user.id}')
+    return redirect(f'/user/account')
 
 
 @app.route('/api/user/account/recommend')
@@ -390,7 +406,7 @@ def recommend_sites():
     else:
         print('failed')
 
-    return jsonify([{'user_id':g.user.id},result[1:7]])                    
+    return jsonify([result[1:7]])                    
    
        
 

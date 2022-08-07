@@ -196,7 +196,7 @@ class Campground(db.Model):
     facility_name = db.Column(
         db.Text,
         nullable=False,
-        unique=True
+        
     )
 
     facility_photo = db.Column(

@@ -33,17 +33,33 @@ for (let btn of $btns) {
 
 $("#saved-sites").click(function () {
   getSaves();
+  $('#recommend-sites').prop('disabled', true)
+  
+  
 
   $("#saved-sites")
     .off("click")
     .on("click", function () {
       if ($("#saved-campsites-container").is(":visible")) {
         $("#saved-campsites-container").hide();
+        $('#recommend-sites').prop('disabled', false)
         $("#save-data-container").css("height", "100%");
       } else if ($("#recommend-campsites-container").is(":visible")) {
         $("#save-data-container").css("height", "auto");
+        $('#recommend-sites').prop('disabled', true)
       } else {
         $("#saved-campsites-container").show();
+          if($(".img-thumbnail").length > 3  ){ 
+          $("#save-data-container").css("height", "auto");
+          console.log($(".img-thumbnail").length)
+        }
+        else if($(".img-thumbnail").length <= 3){
+          $("#save-data-container").css("height", "100%");
+
+        }
+        
+        
+        $('#recommend-sites').prop('disabled', true)
       }
     });
 });
@@ -55,11 +71,12 @@ async function getSaves() {
     $("#saved-sites").off("click");
     return;
   }
-  if (res.data.length >= 3) {
+  if (res.data.length > 3) {
     $("#save-data-container").css("height", "auto");
   }
 
   displaySaves(res.data);
+  
 }
 
 function displaySaves(data) {
@@ -95,17 +112,21 @@ function displaySaves(data) {
 }
 
 $("#recommend-sites").click(function () {
+  $("#saved-sites").prop('disabled', true)
   getRecommend();
 
   $("#recommend-sites")
     .off("click")
     .on("click", function () {
       if ($("#recommend-campsites-container").is(":visible")) {
+        $("#saved-sites").prop('disabled', false)
         $("#recommend-campsites-container").hide();
         $("#save-data-container").css("height", "100%");
       } else if ($("#saved-campsites-container").is(":visible")) {
+        $("#saved-sites").prop('disabled', false)
         $("#save-data-container").css("height", "100%");
       } else {
+        $("#saved-sites").prop('disabled', true)
         $("#recommend-campsites-container").show();
         $("#save-data-container").css("height", "auto");
       }
@@ -121,11 +142,12 @@ async function getRecommend() {
   }
   $("#save-data-container").css("height", "auto");
   displayRec(res.data);
+  console.log(res.data)
 }
 
 function displayRec(data) {
-  userId = data[0].user_id;
-  data[1].forEach((element) => {
+  
+  data[0].forEach((element) => {
     let {
       "@facilityName": facility_name,
       "@faciltyPhoto": facility_photo,
@@ -190,4 +212,6 @@ function displayRec(data) {
   });
   $("#recommend-campsites-container").show();
 }
+
+
 
