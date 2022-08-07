@@ -1,5 +1,6 @@
 import os
 import re
+from dotenv import load_dotenv
 import requests
 import xmltodict
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
@@ -9,18 +10,17 @@ from sqlalchemy.exc import IntegrityError
 import numpy as np
 from numpy import AxisError
 from flask_debugtoolbar import DebugToolbarExtension
-from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+
+
+load_dotenv()
+app = Flask(__name__)
 
 uri = os.environ.get('DATABASE_URL', 'postgresql:///campout')
 if uri.startswith("postgres://"):
  uri = uri.replace("postgres://", "postgresql://", 1)
-
-app = Flask(__name__)
-
 app.debug = False
 app.config["SQLALCHEMY_DATABASE_URI"] = uri 
-""" app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///campout' """
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False 
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -30,8 +30,9 @@ toolbar = DebugToolbarExtension(app)
 
 
 connect_db(app)
-API_URL = 'http://api.amp.active.com/camping/campgrounds/?'
-TOKEN = 'api_key=crkt92prkygkp3h6j7kb62c2'
+API_URL = os.environ.get('API_URL')
+TOKEN = os.environ.get('API_KEY')
+
 FACILTYPHOTO_BASE_URL = 'http://www.reserveamerica.com'
 CURR_USER_KEY = "curr_user"
 
