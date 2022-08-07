@@ -85,7 +85,11 @@ function displaySaves(data) {
     if (facility_photo === "http://www.reserveamerica.com/images/nophoto.jpg") {
       facility_photo = "/static/images/generic-campsite.jpg";
     }
-
+    let fac_name = facility_name.toString().replace('/', '')
+    console.log(fac_name.replace(' ', ''))
+    
+    
+   
     const $display = $(
       `<div class="row"> 
        <div class="col">
@@ -97,7 +101,7 @@ function displaySaves(data) {
           <p class="h6">Park: ${facility_name}</p>
           <p class="h6">State: ${state}</p>
           <p class="h6 mb-2">Type: ${facility_type}</p>
-          <form action="/api/user/account/saved/${facility_name}/delete" method='POST'>
+          <form action="/api/user/account/saved/${fac_name}/delete" method='POST'>
           <button type="submit" class="btn btn-outline-danger btn-sm mt-1"><i class="fa-solid fa-trash"></i></button>
           </form>
        </div>
@@ -168,6 +172,10 @@ function displayRec(data) {
       facility_photo = "/static/images/generic-campsite.jpg";
     }
 
+    let fac_name = facility_name.toString().replace('/', '')
+    console.log(fac_name.replace(' ', ''))
+    
+
     const $display = $(
       `<div class="row"> 
        <div class="col">
@@ -177,9 +185,9 @@ function displayRec(data) {
        <div class="row">
        <div class="col">
           <p class="h6">Park: ${facility_name}</p>
-          <form action="/search/save/${facility_name}" method='POST'>
+          <form action="/search/save/${fac_name}" method='POST'>
           <input name="facility_photo" type="hidden" value="${facility_photo}">
-          <input name="facility_name" type="hidden" value="${facility_name}">
+          <input name="facility_name" type="hidden" value="${fac_name}">
           <input name="state" type="hidden" value="${state}">
           <input name="facility_type" type="hidden" value="${facility_type}">
           <input name="amps" type="hidden" value="${amps}">
