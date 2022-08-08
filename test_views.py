@@ -173,12 +173,33 @@ class UserViewTestCase(TestCase):
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn=('<p class="h6">Park: BUFFALO CAMPGROUND</p>', html)    
-    
-    
-    
-    
+            self.assertIn=('<p class="h6">Park: BUFFALO CAMPGROUND</p>', html)   
+
+
+
     def test_search_save_site(self):
+          with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.testuser_id
+
+             
+                
+            d = {'facility_photo':'http://www.reserveamerica.com/webphotos/CO/pid50021/0/80x53.jpg', 'facility_name':'Chatfield State Park', 'state':'CO',
+            'facility_type':'STATE', 'amps':'Y', 'pets':'Y', 'water':'Y', 'sewer':'Y', 
+            'waterfront':'','eq_length': '','landmark_lat':'39.5380556','landmark_long':'-105.0872222'}
+            
+            fname = d['facility_name']
+            resp = c.post('/search/save/Chatfield State Park', data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 302)
+            self.assertIn=('<div class="alert alert-success">Site has been saved</div>', html) 
+                   
+    
+    
+    
+    
+    def test_search_allready_saved_site(self):
           with self.client as c:
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.testuser_id
@@ -193,8 +214,8 @@ class UserViewTestCase(TestCase):
             resp = c.post('/search/save/BUFFALO CAMPGROUND', data=d, follow_redirects=True)
             html = resp.get_data(as_text=True)
 
-            self.assertEqual(resp.status_code, 302)
-            self.assertIn=('<div class="alert alert-success">Site has been saved</div>', html)  
+            self.assertEqual(resp.status_code, 404)
+            self.assertIn=('<div class="alert alert-danger">Site already saved</div>', html)  
 
                 
     
@@ -204,21 +225,23 @@ class UserViewTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.testuser_id
             
-            resp = c.get('/user/account/9000')
+            resp = c.get('/user/account')
             html = resp.get_data(as_text=True)
 
-            self.assertEqual(resp.status_code, 200)
+            self.assertEqual(resp.status_code, 301)
             self.assertIn=("<h2 style=color: white;>testuser's Saved Sites</h2>", html)
 
    
     def test_user_account_unauthorized(self):
         with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.testuser_id
             
                 
-            resp = c.get('/user/account/9000')
+            resp = c.get('/user/account')
             html = resp.get_data(as_text=True)
                 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 301)
             self.assertIn=('<div class="alert alert-danger">Please register/login first</div>', html)
                        
     
@@ -228,12 +251,11 @@ class UserViewTestCase(TestCase):
              with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.testuser_id
             
+             resp = c.get('/user/account/edit')
+             html = resp.get_data(as_text=True)
                 
-         resp = c.get('/user/account/9000/edit')
-         html = resp.get_data(as_text=True)
-                
-         self.assertEqual(resp.status_code, 200)
-         self.assertIn=('<form method="POST" id="user_form" action="/user/account/1/edit">', html)
+             self.assertEqual(resp.status_code, 200)
+             self.assertIn=('<form method="POST" id="user_form" action="/user/account/1/edit">', html)
 
     
     def test_user_account_edit(self):
@@ -241,8 +263,8 @@ class UserViewTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.testuser_id
 
-            d = {'username':"testuser",'email':"test@test.com",'state_id':'CT','city':'Lakewood','site_type': 2003,'password': 'testuser'}
-            resp = c.post('/user/account/9000/edit', data=d, follow_redirects=True) 
+            
+            resp = c.post('/user/account/edit', follow_redirects=True) 
 
             html = resp.get_data(as_text=True)
                 
@@ -289,7 +311,7 @@ class UserViewTestCase(TestCase):
 
          self.assertEqual(resp.status_code, 200)
          json_response = json.loads(resp.get_data(as_text=True))
-         self.assertEqual(resp.json[1][0], 
+         self.assertEqual(resp.json[0][0], 
                                            {'@agencyIcon': '', '@agencyName': '',
                                            '@contractID': 'FLST',
                                            '@contractType': 'FEDERAL',
