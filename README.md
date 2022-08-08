@@ -30,6 +30,8 @@
   
   [Setup](#setup)
   
+  [Testing](#testing)
+  
   [Site Flow](#site-flow)
   
   [Database Schema](#database-schema)
@@ -87,12 +89,19 @@
 
 * (venv) $ createdb warbler
 
-* (venv) $ python seed.py
+* (venv) $ python seed.py - The db creates a list of all US states needed for a dropdown menu when searching
 
 * Start the server:
 
 * (venv) $ flask run
- 
+
+## Testing
+  python Unit tests can be found in the test_views.py file. These tests ensure the functionality of all view functions within the app.
+  To run these tests
+  * Open the terminal
+  * $ python -m unittest test_views.py
+
+  
  
 ## Site Flow
 
