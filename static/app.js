@@ -71,7 +71,7 @@ async function getSaves() {
     $("#saved-sites").off("click");
     return;
   }
-  if (res.data.length > 3) {
+  if (res.data.length >= 3) {
     $("#save-data-container").css("height", "auto");
   }
 
@@ -86,7 +86,7 @@ function displaySaves(data) {
       facility_photo = "/static/images/generic-campsite.jpg";
     }
     let fac_name = facility_name.toString().replace('/', '')
-    console.log(fac_name.replace(' ', ''))
+    
     
     
    
@@ -146,7 +146,7 @@ async function getRecommend() {
   }
   $("#save-data-container").css("height", "auto");
   displayRec(res.data);
-  console.log(res.data)
+  
 }
 
 function displayRec(data) {
@@ -173,7 +173,7 @@ function displayRec(data) {
     }
 
     let fac_name = facility_name.toString().replace('/', '')
-    console.log(fac_name.replace(' ', ''))
+    
     
 
     const $display = $(
