@@ -279,7 +279,7 @@ def user_save_site(facility_name):
     
 
 
-@app.route('/user/account/')
+@app.route('/user/account')
 def user_account():
     """Users account for saved sites and a recommendation list based off of saved sites"""
     
