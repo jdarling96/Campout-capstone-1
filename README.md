@@ -71,7 +71,7 @@
  * Up to 10 filters to apply to when searching for a campground.
  * Users can search for a park with a partial name.
  * Users can save multiple campsites to visit later and is stored in the user account page.
- * Recommendation system that recommends users 6 different campsites based off of the location and amenities of saved sites.
+ * Recommendation system that recommends users different campsites based off of the location and amenities of saved sites.
  * Users can save sites directly from there recommendation list.
  
 ## Authentication
